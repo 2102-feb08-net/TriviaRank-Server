@@ -20,17 +20,6 @@ CREATE TABLE PlayerStatistics
     FOREIGN KEY (PlayerId) REFERENCES Player(Id) ON DELETE CASCADE
 )
 
--- players in the game
-CREATE TABLE GamePlayers
-(
-    Id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
-    GameId INT NOT NULL,
-    PlayerId INT NOT NULL,
-    TotalCorrect INT NOT NULL CHECK (TotalCorrect >= 0),
-    FOREIGN KEY (GameId) REFERENCES Game(Id),
-    FOREIGN KEY (PlayerId) REFERENCES Player(Id)
-)
-
 -- Game 
 CREATE TABLE Game
 (
@@ -45,6 +34,19 @@ CREATE TABLE Game
     IsPublic BIT NOT NULL,
     FOREIGN KEY (OwnerId) REFERENCES Player(Id) ON DELETE CASCADE,
 )
+
+
+-- players in the game
+CREATE TABLE GamePlayers
+(
+    Id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+    GameId INT NOT NULL,
+    PlayerId INT NOT NULL,
+    TotalCorrect INT NOT NULL CHECK (TotalCorrect >= 0),
+    FOREIGN KEY (GameId) REFERENCES Game(Id),
+    FOREIGN KEY (PlayerId) REFERENCES Player(Id)
+)
+
 
 -- Question s in the game
 CREATE TABLE Question
