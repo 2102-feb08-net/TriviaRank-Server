@@ -1,0 +1,9 @@
+drop TABLE Player;
+drop TABLE PlayerStatistics;
+drop TABLE GamePlayers;
+drop TABLE Game;
+drop TABLE Question;
+drop TABLE Message;
+drop TABLE Friend;
+drop TABLE GameInviteOutbox;
+drop TABLE FriendInviteOutbox;
