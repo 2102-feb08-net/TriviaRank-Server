@@ -1,7 +1,7 @@
 drop TABLE Player;
 drop TABLE PlayerStatistics;
-drop TABLE GamePlayers;
 drop TABLE Game;
+drop TABLE GamePlayers;
 drop TABLE Question;
 drop TABLE Message;
 drop TABLE Friend;

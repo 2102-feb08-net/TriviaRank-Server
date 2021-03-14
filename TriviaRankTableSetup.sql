@@ -17,7 +17,7 @@ CREATE TABLE PlayerStatistics
     PlayerId INT NOT NULL,
     Selection NVARCHAR(5) NOT NULL,
     Frequency INT NOT NULL CHECK (Frequency >= 0),
-    FOREIGN KEY (PlayerId) REFERENCES Player(UserId) ON DELETE CASCADE
+    FOREIGN KEY (PlayerId) REFERENCES Player(Id) ON DELETE CASCADE
 )
 
 -- players in the game
@@ -27,8 +27,8 @@ CREATE TABLE GamePlayers
     GameId INT NOT NULL,
     PlayerId INT NOT NULL,
     TotalCorrect INT NOT NULL CHECK (TotalCorrect >= 0),
-    FOREIGN KEY (GameId) REFERENCES Game(Id) ON DELETE CASCADE,
-    FOREIGN KEY (PlayerId) REFERENCES Player(Id) ON DELETE CASCADE
+    FOREIGN KEY (GameId) REFERENCES Game(Id),
+    FOREIGN KEY (PlayerId) REFERENCES Player(Id)
 )
 
 -- Game 
@@ -53,8 +53,8 @@ CREATE TABLE Question
     GameId INT NOT NULL,
     PlayerId INT NOT NULL,
     PlayerAnswer NVARCHAR(5) NOT NULL,
-    FOREIGN KEY (GameId) REFERENCES Game(Id) ON DELETE CASCADE,
-    FOREIGN KEY (PlayerId) REFERENCES Player(Id) ON DELETE CASCADE
+    FOREIGN KEY (GameId) REFERENCES Game(Id),
+    FOREIGN KEY (PlayerId) REFERENCES Player(Id)
 )
 
 -- Player messages to each other
@@ -66,8 +66,8 @@ CREATE TABLE Message
     -- this could be confussing codewise
     Body NVARCHAR(400),
     Date DATETIMEOFFSET NOT NULL,
-    FOREIGN KEY (FromId) REFERENCES Player(Id) ON DELETE CASCADE,
-    FOREIGN KEY (ToId) REFERENCES Player(Id) ON DELETE CASCADE
+    FOREIGN KEY (FromId) REFERENCES Player(Id),
+    FOREIGN KEY (ToId) REFERENCES Player(Id)
 )
 
 -- FRIENDS 
@@ -77,8 +77,8 @@ CREATE TABLE Friend
     Id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
     PlayerId INT NOT NULL,
     FriendId INT NOT NULL,
-    FOREIGN KEY (PlayerId) REFERENCES Player(Id) ON DELETE CASCADE,
-    FOREIGN KEY (FriendId) REFERENCES Player(Id) ON DELETE CASCADE
+    FOREIGN KEY (PlayerId) REFERENCES Player(Id),
+    FOREIGN KEY (FriendId) REFERENCES Player(Id)
 )
 
 -- INVITE TO GAME
@@ -88,8 +88,8 @@ CREATE TABLE GameInviteOutbox
     InvitedId INT NOT NULL,
     Date DATETIMEOFFSET NOT NULL,
     GameId INT NOT NULL,
-    FOREIGN KEY (GameId) REFERENCES Game(Id) ON DELETE CASCADE,
-    FOREIGN KEY (InvitedId) REFERENCES Player(Id) ON DELETE CASCADE
+    FOREIGN KEY (GameId) REFERENCES Game(Id),
+    FOREIGN KEY (InvitedId) REFERENCES Player(Id)
 
 )
 
@@ -100,7 +100,7 @@ CREATE TABLE FriendInviteOutbox
     InviterId INT NOT NULL,
     InvitedId INT NOT NULL,
     Date DATETIMEOFFSET NOT NULL,
-    FOREIGN KEY (InviterId) REFERENCES Player(UserId),
-    FOREIGN KEY (InvitedId) REFERENCES Player(UserId)
+    FOREIGN KEY (InviterId) REFERENCES Player(Id),
+    FOREIGN KEY (InvitedId) REFERENCES Player(Id)
 )
 
