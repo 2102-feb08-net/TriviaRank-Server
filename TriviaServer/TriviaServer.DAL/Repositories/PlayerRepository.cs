@@ -23,8 +23,18 @@ namespace TriviaServer.DAL.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Player if found else Null</returns>
-        public void getPlayerById(int id)
+        public async Task<TriviaPlayer> getPlayerById(int id)
         {
+            Player p = await _context.Players.FirstOrDefaultAsync(p => p.Id == id);
+            return new TriviaPlayer()
+            {
+                Id = p.Id,
+                Username = p.Username,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                Points = p.Points,
+                Birthday = p.Birthday
+            };
         }
 
 
@@ -41,8 +51,13 @@ namespace TriviaServer.DAL.Repositories
             }).ToListAsync();
         }
 
-        public void getFriendsOfPlayer(int id)
+        public async Task<IEnumerable<int>> getFriendsOfPlayer(int id)
         {
+            var players = new List<int>();
+            var currentPlayer = await _context.Players
+                .Include(p => p.FriendPlayers)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            return currentPlayer.FriendPlayers.Select(p => p.FriendId);
         }
 
         public async Task<int> createPlayer(TriviaPlayer player)
@@ -58,6 +73,17 @@ namespace TriviaServer.DAL.Repositories
             await _context.AddAsync(newPlayer);
             await saveAsync();
             return newPlayer.Id;
+        }
+
+        public async Task createFriend(int playerId, int friendId)
+        {
+            Friend friend = new Friend()
+            {
+                PlayerId = playerId,
+                FriendId = friendId,
+            };
+            await _context.AddAsync(friend);
+            await saveAsync();
         }
 
         /// <summary>
