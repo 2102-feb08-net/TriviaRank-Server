@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace TriviaServer.Models
 {
-    public class TriviaPlayer
+  public class TriviaPlayer
+  {
+    public string Username { get; set; }
+
+
+
+    public int Id { get; set; }
+
+    public bool StringIsOnlyAlphaNumberic(string str)
     {
-        public string Username { get; set; }
-        public int Id { get; set; }
+      throw new NotImplementedException("NOT IMPLEMENTED");
     }
+  }
 }
