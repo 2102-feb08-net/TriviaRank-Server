@@ -17,26 +17,26 @@ namespace TriviaServer.DAL.Repositories
         }
         public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
         {
-            Game newGame = new Game
-            {
-                GameName = gameName,
-                OwnerId = ownerId,
-                StartDate = DateTime.Now,
-                TotalQuestions = totalQuestions,
-                IsPublic = isPublic
-            };
+            Game createGame = await _context.Games
+            .OrderBy(x => x.Id).LastAsync();
 
-            await _context.AddAsync(newGame);
+                createGame.GameName = gameName,
+                createGame.OwnerId = ownerId,
+                createGame.StartDate = DateTime.Now,
+                createGame.TotalQuestions = totalQuestions,
+                createGame.IsPublic = isPublic;
+
+            await _context.AddAsync(createGame);
             await _context.SaveChangesAsync();
 
             Models.GameModel appGame = new Models.GameModel
             {
-                Id = newGame.Id,
-                GameName = newGame.GameName,
-                OwnerId = newGame.OwnerId,
-                StartDate = newGame.StartDate,
-                TotalQuestions = newGame.TotalQuestions,
-                IsPublic = newGame.IsPublic
+                Id = createGame.Id,
+                GameName = createGame.GameName,
+                OwnerId = createGame.OwnerId,
+                StartDate = createGame.StartDate,
+                TotalQuestions = createGame.TotalQuestions,
+                IsPublic = createGame.IsPublic
             };
             return appGame;
         }
