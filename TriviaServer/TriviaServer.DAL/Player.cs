@@ -27,6 +27,8 @@ namespace TriviaServer.DAL
         public string Password { get; set; }
         public DateTimeOffset Birthday { get; set; }
         public int Points { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public virtual ICollection<Friend> FriendFriendNavigations { get; set; }
         public virtual ICollection<FriendInviteOutbox> FriendInviteOutboxInviteds { get; set; }

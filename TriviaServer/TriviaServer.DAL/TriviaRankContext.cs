@@ -137,6 +137,14 @@ namespace TriviaServer.DAL
                 entity.HasIndex(e => e.Username, "UQ__Player__536C85E4AB2BC322")
                     .IsUnique();
 
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(50)
