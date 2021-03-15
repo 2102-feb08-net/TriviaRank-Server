@@ -17,16 +17,15 @@ namespace TriviaServer.DAL.Repositories
             _context = context;
         }
 
-
         /// <summary>
         /// Async function to find a player by his id. 
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Player if found else Null</returns>
-        public async Task<TriviaPlayer> getPlayerById(int id)
+        public async Task<PlayerModel> getPlayerById(int id)
         {
             Player p = await _context.Players.FirstOrDefaultAsync(p => p.Id == id);
-            return new TriviaPlayer()
+            return new PlayerModel()
             {
                 Id = p.Id,
                 Username = p.Username,
@@ -38,9 +37,9 @@ namespace TriviaServer.DAL.Repositories
         }
 
 
-        public async Task<IEnumerable<TriviaPlayer>> getAllPlayers()
+        public async Task<IEnumerable<PlayerModel>> getAllPlayers()
         {
-            return await _context.Players.Select(p => new TriviaPlayer() 
+            return await _context.Players.Select(p => new PlayerModel() 
             { 
                 Id = p.Id, 
                 Username = p.Username, 
@@ -60,8 +59,14 @@ namespace TriviaServer.DAL.Repositories
             return currentPlayer.FriendPlayers.Select(p => p.FriendId);
         }
 
-        public async Task<int> createPlayer(TriviaPlayer player)
+        public async Task<int> createPlayer(PlayerModel player)
         {
+            var playerExists = await _context.Players.FirstOrDefaultAsync(p => p.Username == player.Username) != null;
+            if (playerExists)
+            {
+                throw new InvalidOperationException("invalid client operation.");
+            }
+
             Player newPlayer = new Player()
             {
                 FirstName = player.FirstName,
@@ -70,6 +75,7 @@ namespace TriviaServer.DAL.Repositories
                 Points = player.Points,
                 Birthday = player.Birthday
             };
+
             await _context.AddAsync(newPlayer);
             await saveAsync();
             return newPlayer.Id;
@@ -77,6 +83,13 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task createFriend(int playerId, int friendId)
         {
+            var playerExists = await _context.Players.FirstOrDefaultAsync(p => p.Id == playerId) != null;
+            var friendExists = await _context.Players.FirstOrDefaultAsync(p => p.Id == friendId) != null;
+            if (playerExists || friendExists)
+            {
+                throw new InvalidOperationException("invalid client operation.");
+            }
+
             Friend friend = new Friend()
             {
                 PlayerId = playerId,

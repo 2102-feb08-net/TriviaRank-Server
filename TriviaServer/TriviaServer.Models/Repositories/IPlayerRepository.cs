@@ -13,13 +13,13 @@ namespace TriviaServer.Models.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Player if found else Null</returns>
-        public Task<TriviaPlayer> getPlayerById(int id);
+        public Task<PlayerModel> getPlayerById(int id);
 
 
-        public Task<IEnumerable<TriviaPlayer>> getAllPlayers();
+        public Task<IEnumerable<PlayerModel>> getAllPlayers();
 
         public Task<IEnumerable<int>> getFriendsOfPlayer(int id);
-        public Task<int> createPlayer(TriviaPlayer player);
+        public Task<int> createPlayer(PlayerModel player);
         public Task createFriend(int playerId, int friendId);
 
         /// <summary>

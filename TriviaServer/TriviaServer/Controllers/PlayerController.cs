@@ -36,7 +36,7 @@ namespace TriviaServer.Controllers
         [HttpGet("api/player/{id}")]
         public async Task<IActionResult> getPlayerById(int id)
         {
-            TriviaPlayer player;
+            PlayerModel player;
             try
             {
                 player = await _playerRepo.getPlayerById(id);
@@ -52,7 +52,7 @@ namespace TriviaServer.Controllers
         [HttpGet("api/players")]
         public async Task<IActionResult> getAllPlayers()
         {
-            IEnumerable<TriviaPlayer> sortedPlayers;
+            IEnumerable<PlayerModel> sortedPlayers;
             try
             {
                 var players = await _playerRepo.getAllPlayers();
@@ -66,12 +66,16 @@ namespace TriviaServer.Controllers
         }
 
         [HttpPost("api/player")]
-        public async Task<IActionResult> createPlayer(TriviaPlayer newPlayer)
+        public async Task<IActionResult> createPlayer(PlayerModel newPlayer)
         {
             int playerId;
             try
             {
                 playerId = await _playerRepo.createPlayer(newPlayer);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return StatusCode(400);
             }
             catch (Exception e)
             {
@@ -80,18 +84,22 @@ namespace TriviaServer.Controllers
             return Ok(playerId);
         }
 
-        //[HttpPost("api/test/friend/{playerId}/{friendId}")]
-        //public async Task<IActionResult> createFriend(int playerId, int friendId)
-        //{
-        //    try
-        //    {
-        //        await _playerRepo.createFriend(playerId, friendId);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return StatusCode(500);
-        //    }
-        //    return Ok();
-        //}
+        [HttpPost("api/friend/{playerId}/{friendId}")]
+        public async Task<IActionResult> createFriend(int playerId, int friendId)
+        {
+            try
+            {
+                await _playerRepo.createFriend(playerId, friendId);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return StatusCode(400);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
     }
 }
