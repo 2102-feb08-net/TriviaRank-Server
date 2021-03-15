@@ -17,9 +17,6 @@ namespace TriviaServer.DAL.Repositories
         }
         public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
         {
-            Game createGame = await _context.Games
-            .OrderBy(x => x.Id).LastAsync();
-
             Game newGame = new Game
             {
                 GameName = gameName,
@@ -51,7 +48,7 @@ namespace TriviaServer.DAL.Repositories
 
             endGame.EndDate = DateTime.Now;
 
-            _context.Add(endGame);
+            _context.Update(endGame);
             _context.SaveChanges();
         }
 
