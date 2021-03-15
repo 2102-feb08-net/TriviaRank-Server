@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TriviaServer.Models\TriviaServer.Models.csproj" />
+  </ItemGroup>
+
 </Project>
