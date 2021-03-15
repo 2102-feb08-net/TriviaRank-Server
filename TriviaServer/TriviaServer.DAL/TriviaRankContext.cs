@@ -39,13 +39,13 @@ namespace TriviaServer.DAL
                     .WithMany(p => p.FriendFriendNavigations)
                     .HasForeignKey(d => d.FriendId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Friend__FriendId__2645B050");
+                    .HasConstraintName("FK__Friend__FriendId__531856C7");
 
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.FriendPlayers)
                     .HasForeignKey(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Friend__PlayerId__25518C17");
+                    .HasConstraintName("FK__Friend__PlayerId__5224328E");
             });
 
             modelBuilder.Entity<FriendInviteOutbox>(entity =>
@@ -76,7 +76,7 @@ namespace TriviaServer.DAL
                 entity.HasOne(d => d.Owner)
                     .WithMany(p => p.Games)
                     .HasForeignKey(d => d.OwnerId)
-                    .HasConstraintName("FK__Game__OwnerId__05D8E0BE");
+                    .HasConstraintName("FK__Game__OwnerId__42E1EEFE");
             });
 
             modelBuilder.Entity<GameInviteOutbox>(entity =>
@@ -87,13 +87,13 @@ namespace TriviaServer.DAL
                     .WithMany(p => p.GameInviteOutboxes)
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__GameInvit__GameI__2CF2ADDF");
+                    .HasConstraintName("FK__GameInvit__GameI__55F4C372");
 
                 entity.HasOne(d => d.Invited)
                     .WithMany(p => p.GameInviteOutboxes)
                     .HasForeignKey(d => d.InvitedId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__GameInvit__Invit__2DE6D218");
+                    .HasConstraintName("FK__GameInvit__Invit__56E8E7AB");
             });
 
             modelBuilder.Entity<GamePlayer>(entity =>
@@ -102,13 +102,13 @@ namespace TriviaServer.DAL
                     .WithMany(p => p.GamePlayers)
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__GamePlaye__GameI__0E6E26BF");
+                    .HasConstraintName("FK__GamePlaye__GameI__46B27FE2");
 
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.GamePlayers)
                     .HasForeignKey(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__GamePlaye__Playe__0F624AF8");
+                    .HasConstraintName("FK__GamePlaye__Playe__47A6A41B");
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -121,13 +121,13 @@ namespace TriviaServer.DAL
                     .WithMany(p => p.MessageFroms)
                     .HasForeignKey(d => d.FromId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Message__FromId__1DB06A4F");
+                    .HasConstraintName("FK__Message__FromId__4E53A1AA");
 
                 entity.HasOne(d => d.To)
                     .WithMany(p => p.MessageTos)
                     .HasForeignKey(d => d.ToId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Message__ToId__1EA48E88");
+                    .HasConstraintName("FK__Message__ToId__4F47C5E3");
             });
 
             modelBuilder.Entity<Player>(entity =>
@@ -164,14 +164,15 @@ namespace TriviaServer.DAL
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.PlayerStatistics)
                     .HasForeignKey(d => d.PlayerId)
-                    .HasConstraintName("FK__PlayerSta__Playe__02084FDA");
+                    .HasConstraintName("FK__PlayerSta__Playe__3F115E1A");
             });
 
             modelBuilder.Entity<Question>(entity =>
             {
-                entity.ToTable("Question");
+                entity.HasKey(e => new { e.Id, e.QuestionId, e.GameId })
+                    .HasName("PK__Question__1EE2526A0F23A441");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("Question");
 
                 entity.Property(e => e.PlayerAnswer)
                     .IsRequired()
@@ -181,13 +182,13 @@ namespace TriviaServer.DAL
                     .WithMany(p => p.Questions)
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Question__GameId__160F4887");
+                    .HasConstraintName("FK__Question__GameId__5AB9788F");
 
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.Questions)
                     .HasForeignKey(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Question__Player__17036CC0");
+                    .HasConstraintName("FK__Question__Player__5BAD9CC8");
             });
 
             OnModelCreatingPartial(modelBuilder);
