@@ -1,9 +1,9 @@
-drop TABLE Player;
-drop TABLE PlayerStatistics;
-drop TABLE Game;
-drop TABLE GamePlayers;
-drop TABLE Question;
-drop TABLE Message;
-drop TABLE Friend;
-drop TABLE GameInviteOutbox;
-drop TABLE FriendInviteOutbox;
+DROP TABLE IF EXISTS Message
+DROP TABLE IF EXISTS FriendInviteOubox
+DROP TABLE IF EXISTS Friend
+DROP TABLE IF EXISTS GameInviteOutbox
+DROP TABLE IF EXISTS GamePlayers
+DROP TABLE IF EXISTS Question
+DROP TABLE IF EXISTS Game
+DROP TABLE IF EXISTS PlayerStatistics
+DROP TABLE IF EXISTS Player

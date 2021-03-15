@@ -53,12 +53,14 @@ CREATE TABLE GamePlayers
 -- Question s in the game
 CREATE TABLE Question
 (
-    Id INT PRIMARY KEY,
+    Id INT NOT NULL,
+    QuestionId INT NOT NULL,
     GameId INT NOT NULL,
     PlayerId INT NOT NULL,
     PlayerAnswer NVARCHAR(5) NOT NULL,
     FOREIGN KEY (GameId) REFERENCES Game(Id),
-    FOREIGN KEY (PlayerId) REFERENCES Player(Id)
+    FOREIGN KEY (PlayerId) REFERENCES Player(Id),
+    PRIMARY KEY (Id,QuestionId,GameId)
 )
 
 -- Player messages to each other
