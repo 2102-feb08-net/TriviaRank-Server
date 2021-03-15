@@ -19,6 +19,7 @@ namespace TriviaServer.Models.Repositories
         public Task<IEnumerable<TriviaPlayer>> getAllPlayers();
 
         public void getFriendsOfPlayer(int id);
+        public Task<int> createPlayer(TriviaPlayer player);
 
         /// <summary>
         /// Save changes async

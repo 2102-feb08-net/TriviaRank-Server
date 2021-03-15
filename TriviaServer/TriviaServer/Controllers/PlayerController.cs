@@ -19,12 +19,19 @@ namespace TriviaServer.Controllers
             _playerRepo = playerRepo;
         }
 
-        [HttpGet("api/customers")]
-        public async Task<IActionResult> getAllCustomers()
+        [HttpGet("api/players")]
+        public async Task<IActionResult> getAllPlayers()
         {
             var players = await _playerRepo.getAllPlayers();
             var sortedPlayers = players.OrderBy(p => p.Id);
             return Ok(sortedPlayers);
+        }
+
+        [HttpPost("api/player")]
+        public async Task<IActionResult> createPlayer(TriviaPlayer newPlayer)
+        {
+            var playerId = await _playerRepo.createPlayer(newPlayer);
+            return Ok();
         }
     }
 }

@@ -30,11 +30,34 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<IEnumerable<TriviaPlayer>> getAllPlayers()
         {
-            return await _context.Players.Select(p => new TriviaPlayer() { Id = p.Id, Username = p.Username }).ToListAsync();
+            return await _context.Players.Select(p => new TriviaPlayer() 
+            { 
+                Id = p.Id, 
+                Username = p.Username, 
+                FirstName = p.FirstName, 
+                LastName = p.LastName,
+                Points = p.Points,
+                Birthday = p.Birthday
+            }).ToListAsync();
         }
 
         public void getFriendsOfPlayer(int id)
         {
+        }
+
+        public async Task<int> createPlayer(TriviaPlayer player)
+        {
+            Player newPlayer = new Player()
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                Username = player.Username,
+                Points = player.Points,
+                Birthday = player.Birthday
+            };
+            await _context.AddAsync(newPlayer);
+            await saveAsync();
+            return newPlayer.Id;
         }
 
         /// <summary>
