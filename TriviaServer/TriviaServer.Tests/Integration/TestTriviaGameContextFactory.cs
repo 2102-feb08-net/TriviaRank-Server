@@ -9,7 +9,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace TriviaServer.Tests.Library
+namespace TriviaServer.Tests.Integration
 {
     public class TestTriviaGameContextFactory : IDisposable
     {

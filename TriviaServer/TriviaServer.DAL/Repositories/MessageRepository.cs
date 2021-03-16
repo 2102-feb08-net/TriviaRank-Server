@@ -19,11 +19,6 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<int> createMessage(int senderId, int receiverId, string body)
         {
-            if (await validateSenderReceiver(senderId, receiverId))
-            {
-                throw new InvalidOperationException("invalid client operation");
-            }
-
             Message message = new Message()
             {
                 FromId = senderId,
@@ -39,12 +34,7 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<IEnumerable<MessageModel>> getLastNMessages(int senderId, int receiverId, int numMessages)
         {
-            if (await validateSenderReceiver(senderId, receiverId) || !Enumerable.Range(1, 50).Contains(numMessages))
-            {
-                throw new InvalidOperationException("invalid client operation");
-            }
-
-            List<MessageModel> messages = await _context.Messages.Include(m => m.From).Include(m => m.From)
+            List<MessageModel> messages = await _context.Messages.Include(m => m.From).Include(m => m.To)
                 .Where(m => m.FromId == senderId && m.ToId == receiverId)
                 .Select(m => new MessageModel()
                 {
@@ -56,7 +46,6 @@ namespace TriviaServer.DAL.Repositories
                     Body = m.Body,
                     Date = m.Date
                 })
-                .OrderBy(m => m.Date)
                 .ToListAsync();
 
             return messages.TakeLast(numMessages);
@@ -64,13 +53,8 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<List<MessageModel>> getMessagesBetweenDate(int senderId, int receiverId, DateTimeOffset startDate, DateTimeOffset endDate)
         {
-            if (await validateSenderReceiver(senderId, receiverId))
-            {
-                throw new InvalidOperationException("invalid client operation");
-            }
-
-            List<MessageModel> messages = await _context.Messages.Include(m => m.From).Include(m => m.From)
-                .Where(m => m.FromId == senderId && m.ToId == receiverId && (m.Date >= startDate && m.Date <= endDate))
+            List<MessageModel> messages = await _context.Messages.Include(m => m.From).Include(m => m.To)
+                .Where(m => m.FromId == senderId && m.ToId == receiverId && m.Date >= startDate && m.Date <= endDate)
                 .Select(m => new MessageModel()
                 {
                     Id = m.Id,
@@ -81,7 +65,6 @@ namespace TriviaServer.DAL.Repositories
                     Body = m.Body,
                     Date = m.Date
                 })
-                .OrderBy(m => m.Date)
                 .ToListAsync();
 
             return messages;

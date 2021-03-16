@@ -19,14 +19,6 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<int> createFriendInvite(int playerId, int friendId)
         {
-            bool invalidPlayer = await _context.Players.FindAsync(playerId) == null;
-            bool invalidFriend = await _context.Players.FindAsync(friendId) == null;
-            bool inviteExists = await _context.FriendInviteOutboxes.FirstOrDefaultAsync(o => o.InviterId == playerId && o.InvitedId == friendId) != null;
-            if (invalidPlayer || invalidFriend || inviteExists)
-            {
-                throw new InvalidOperationException("invalid client operation");
-            }
-
             FriendInviteOutbox fObx = new FriendInviteOutbox()
             {
                 InviterId = playerId,
@@ -41,14 +33,6 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<int> createGameInvite(int gameId, int playerId)
         {
-            bool invalidPlayer = await _context.Players.FindAsync(playerId) == null;
-            bool invalidGame = await _context.Games.FindAsync(gameId) == null;
-            bool inviteExists = await _context.GameInviteOutboxes.FirstOrDefaultAsync(o => o.GameId == gameId && o.InvitedId == playerId) != null;
-            if (invalidPlayer || invalidGame || inviteExists)
-            {
-                throw new InvalidOperationException("invalid client operation");
-            }
-
             GameInviteOutbox gObx = new GameInviteOutbox()
             {
                 GameId = gameId,
