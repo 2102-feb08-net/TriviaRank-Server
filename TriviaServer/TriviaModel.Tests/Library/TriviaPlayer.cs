@@ -13,7 +13,6 @@ namespace TriviaServer.Tests
     [InlineData("JACK")]
     [InlineData("JACK123")]
     [InlineData("Jack123")]
-    [InlineData("")]
 
     public void PlayerUserName_HasOnlyAlphaNumericChars_ReturnTrue(string userName)
     {
@@ -36,6 +35,8 @@ namespace TriviaServer.Tests
     [InlineData("J@CK")]
     [InlineData("J@CK!23")]
     [InlineData("J@ck!23")]
+    [InlineData("")]
+
     public void PlayerUserName_HasOnlyAlphaNumericChars_ReturnFalse(string userName)
     {
       // arrange
@@ -54,15 +55,17 @@ namespace TriviaServer.Tests
   {
     [Theory]
     [InlineData("Bob")]
+    [InlineData("A")]
 
-    public void StringisValidName_OnlyCharsFirstCapitalized_ReturnTrue(string userName)
+
+    public void StringIsValidName_OnlyCharsFirstCapitalized_ReturnTrue(string userName)
     {
       // arrange
       var player = new TriviaPlayer();
       string testString = userName;
 
       // act
-      bool isNameOkay = player.StringisValidName(testString);
+      bool isNameOkay = player.StringIsValidName(testString);
       // assert
       Assert.True(isNameOkay);
     }
@@ -73,15 +76,19 @@ namespace TriviaServer.Tests
     [InlineData("jack")]
     [InlineData("Jack1")]
     [InlineData("")]
+    [InlineData("Thisisatributetothegreatestandlongestnameinthewholewideworld")]
+    [InlineData("Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy")]
 
-    public void StringisValidName_NoCapitalLettersAndNumbersLength0_ReturnFalse(string userName)
+
+
+    public void StringIsValidName_NoCapitalLettersAndNumbersLength0_ReturnFalse(string userName)
     {
       // arrange
       var player = new TriviaPlayer();
       string testString = userName;
 
       // act
-      bool isNameOkay = player.StringisValidName(testString);
+      bool isNameOkay = player.StringIsValidName(testString);
       // assert
       Assert.False(isNameOkay);
     }
