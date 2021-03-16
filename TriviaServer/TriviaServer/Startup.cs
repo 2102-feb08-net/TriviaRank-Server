@@ -39,6 +39,7 @@ namespace TriviaServer
 
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IOutboxRepository, OutboxRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
