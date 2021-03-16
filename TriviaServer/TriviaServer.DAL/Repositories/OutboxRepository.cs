@@ -34,7 +34,7 @@ namespace TriviaServer.DAL.Repositories
                 Date = DateTimeOffset.Now
             };
 
-            _context.Add(fObx);
+            await _context.AddAsync(fObx);
             await saveAsync();
             return fObx.Id;
         }
@@ -56,7 +56,7 @@ namespace TriviaServer.DAL.Repositories
                 Date = DateTimeOffset.Now
             };
 
-            _context.Add(gObx);
+            await _context.AddAsync(gObx);
             await saveAsync();
             return gObx.Id;
         }
