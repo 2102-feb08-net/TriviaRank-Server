@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace TriviaServer.Models
 {
@@ -17,7 +18,11 @@ namespace TriviaServer.Models
 
     public bool StringIsOnlyAlphaNumberic(string str)
     {
-      throw new NotImplementedException("NOT IMPLEMENTED");
+      return Regex.IsMatch(str, "^[a-zA-Z0-9]*$");
     }
+    // public bool StringIsOnlyAlphaNumberic(string str)
+    // {
+    //   throw new NotImplementedException("NOT IMPLEMENTED");
+    // }
   }
 }
