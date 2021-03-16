@@ -17,7 +17,7 @@ namespace TriviaServer.Tests
     public void PlayerUserName_HasOnlyAlphaNumericChars_ReturnTrue(string userName)
     {
       // arrange
-      var player = new TriviaPlayer();
+      var player = new PlayerModel();
       string testString = userName;
 
       // act
@@ -41,7 +41,7 @@ namespace TriviaServer.Tests
     {
       // arrange
 
-      var player = new TriviaPlayer();
+      var player = new PlayerModel();
       string testString = userName;
 
       // act
@@ -61,7 +61,7 @@ namespace TriviaServer.Tests
     public void StringIsValidName_OnlyCharsFirstCapitalized_ReturnTrue(string userName)
     {
       // arrange
-      var player = new TriviaPlayer();
+      var player = new PlayerModel();
       string testString = userName;
 
       // act
@@ -84,7 +84,7 @@ namespace TriviaServer.Tests
     public void StringIsValidName_NoCapitalLettersAndNumbersLength0_ReturnFalse(string userName)
     {
       // arrange
-      var player = new TriviaPlayer();
+      var player = new PlayerModel();
       string testString = userName;
 
       // act
