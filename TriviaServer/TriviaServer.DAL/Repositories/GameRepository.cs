@@ -64,7 +64,7 @@ namespace TriviaServer.DAL.Repositories
             return appGame;
         }
 
-        public void EndGame(Models.GameModel appGame)
+        public async Task EndGame(Models.GameModel appGame)
         {
             Game endGame = _context.Games
                 .Where(x => x.Id == appGame.Id).First();
@@ -72,7 +72,7 @@ namespace TriviaServer.DAL.Repositories
             endGame.EndDate = DateTime.Now;
 
             _context.Update(endGame);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Models.GameModel> SearchGames(int appGameID)
