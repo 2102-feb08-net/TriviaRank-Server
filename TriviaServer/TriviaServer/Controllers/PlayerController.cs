@@ -26,7 +26,7 @@ namespace TriviaServer.Controllers
             {
                 players = await _playerRepo.getFriendsOfPlayer(id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -41,7 +41,7 @@ namespace TriviaServer.Controllers
             {
                 player = await _playerRepo.getPlayerById(id);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return StatusCode(500);
             }
@@ -56,7 +56,7 @@ namespace TriviaServer.Controllers
             {
                 player = await _playerRepo.getPlayerByUsername(username);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -73,7 +73,7 @@ namespace TriviaServer.Controllers
                 var players = await _playerRepo.getAllPlayers();
                 sortedPlayers = players.OrderBy(p => p.Id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -88,11 +88,11 @@ namespace TriviaServer.Controllers
             {
                 playerId = await _playerRepo.createPlayer(newPlayer);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -106,11 +106,11 @@ namespace TriviaServer.Controllers
             {
                 await _playerRepo.createFriend(playerId, friendId);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }

@@ -26,7 +26,7 @@ namespace TriviaServer.Controllers
             {
                 players = await _outboxRepo.getFriendInvites(playerId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500); 
             }
@@ -41,7 +41,7 @@ namespace TriviaServer.Controllers
             {
                 games = await _outboxRepo.getGameInvites(playerId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -56,11 +56,11 @@ namespace TriviaServer.Controllers
             {
                 obxId = await _outboxRepo.createFriendInvite(playerId, friendId);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -75,11 +75,11 @@ namespace TriviaServer.Controllers
             {
                 obxId = await _outboxRepo.createGameInvite(gameId, playerId);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
