@@ -9,14 +9,14 @@ using TriviaServer.Models.Repositories;
 
 namespace TriviaServer.Controllers
 {
-  [ApiController]
-  public class PlayerController : ControllerBase
-  {
-    private readonly IPlayerRepository _playerRepo;
-    public PlayerController(IPlayerRepository playerRepo)
+    [ApiController]
+    public class PlayerController : ControllerBase
     {
-      _playerRepo = playerRepo;
-    }
+        private readonly IPlayerRepository _playerRepo;
+        public PlayerController(IPlayerRepository playerRepo)
+        {
+            _playerRepo = playerRepo;
+        }
 
 
         [HttpGet("api/player/{playerId}/games")]
@@ -57,7 +57,7 @@ namespace TriviaServer.Controllers
             {
                 player = await _playerRepo.getPlayerById(id);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -148,5 +148,4 @@ namespace TriviaServer.Controllers
         }
 
     }
-  }
 }
