@@ -9,14 +9,15 @@ using TriviaServer.Models.Repositories;
 
 namespace TriviaServer.Controllers
 {
-    [ApiController]
-    public class PlayerController : ControllerBase
+  [ApiController]
+  public class PlayerController : ControllerBase
+  {
+    private readonly IPlayerRepository _playerRepo;
+    public PlayerController(IPlayerRepository playerRepo)
     {
-        private readonly IPlayerRepository _playerRepo;
-        public PlayerController(IPlayerRepository playerRepo)
-        {
-            _playerRepo = playerRepo;
-        }
+      _playerRepo = playerRepo;
+    }
+
 
         [HttpGet("api/player/friend/{id}")]
         public async Task<IActionResult> getPlayerFriends(int id)
@@ -130,5 +131,7 @@ namespace TriviaServer.Controllers
             }
             return Ok();
         }
+
     }
+  }
 }
