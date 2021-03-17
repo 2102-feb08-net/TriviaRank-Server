@@ -75,11 +75,11 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<IEnumerable<PlayerModel>> getAllPlayers()
         {
-            return await _context.Players.Select(p => new PlayerModel() 
-            { 
-                Id = p.Id, 
-                Username = p.Username, 
-                FirstName = p.FirstName, 
+            return await _context.Players.Select(p => new PlayerModel()
+            {
+                Id = p.Id,
+                Username = p.Username,
+                FirstName = p.FirstName,
                 LastName = p.LastName,
                 Points = p.Points,
                 Birthday = p.Birthday
