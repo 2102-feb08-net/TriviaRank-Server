@@ -6,7 +6,10 @@ using TriviaServer.Models;
 using Moq;
 using Xunit;
 
-namespace TriviaServer.Tests.Player.Integration
+namespace TriviaServer.Integration.Tests
 {
+  public class PlayerRepositoryTests
+  {
 
+  }
 }
