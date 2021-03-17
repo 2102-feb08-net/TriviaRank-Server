@@ -19,6 +19,21 @@ namespace TriviaServer.Controllers
     }
 
 
+        [HttpGet("api/player/{playerId}/games")]
+        public async Task<IActionResult> getPlayerGames(int playerId)
+        {
+            IEnumerable<GameModel> games;
+            try
+            {
+                games = await _playerRepo.getPlayerGames(playerId, null);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok(games);
+        }
+
         [HttpGet("api/player/friend/{id}")]
         public async Task<IActionResult> getPlayerFriends(int id)
         {

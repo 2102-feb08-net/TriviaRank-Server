@@ -17,6 +17,28 @@ namespace TriviaServer.DAL.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<GameModel>> getPlayerGames(int playerId, bool? isActive)
+        {
+            IEnumerable<GameModel> games = (await _context.Players.Include(p => p.GamePlayers).ThenInclude(gp => gp.Game).FirstOrDefaultAsync(p => p.Id == playerId))
+                .GamePlayers
+                .Select(g => new GameModel
+                {
+                    Id = g.Game.Id,
+                    GameName = g.Game.GameName,
+                    OwnerId = g.Game.OwnerId,
+                    StartDate = g.Game.StartDate,
+                    EndDate = g.Game.EndDate,
+                    GameMode = g.Game.GameMode,
+                    TotalQuestions = g.Game.TotalQuestions,
+                    IsPublic = g.Game.IsPublic
+                });
+            if (isActive != null && isActive == true)
+            {
+                games = games.Where(g => g.EndDate < DateTimeOffset.Now);
+            }
+            return games;
+        }
+
         public async Task<PlayerModel> getPlayerByUsername(string username)
         {
             Player p = await _context.Players.FirstOrDefaultAsync(p => p.Username == username);
