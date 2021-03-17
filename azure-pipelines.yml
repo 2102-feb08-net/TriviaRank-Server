@@ -11,9 +11,6 @@ trigger:
     include:
     - TriviaServer
 
-pr:
-- main
-
 pool:
   vmImage: ubuntu-latest
 
