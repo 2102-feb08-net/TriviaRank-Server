@@ -6,14 +6,82 @@
 trigger:
 - main
 
+pr:
+- main
+
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+- stage: build
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  variables:
+    buildConfiguration: Release
+    appDirectory: TriviaRank-Server/TriviaServer
+
+  jobs:
+  - job: build
+
+    steps:
+    - task: UseDotNet@2
+      displayName: use dotnet sdk 5
+      inputs:
+        packageType: 'sdk'
+        version: '5.0.x'
+    
+    - script: dotnet publish --configuration $(buildConfiguration) --output $(System.ArtifactStagingDirectory)/app
+      displayName: dotnet publish
+      workingDirectory: $(appDirectory)
+    
+    - publish: $(System.ArtifactStagingDirectory)/app
+      artifact: app
+      displayName: publish assemblies
+
+  - job: analyze
+
+    steps:
+    - task: UseDotNet@2
+      displayName: use dotnet sdk 5
+      inputs:
+        packageType: 'sdk'
+        version: '5.0.x'
+
+    - task: UseDotNet@2
+      displayName: add dotnet runtime 2
+      inputs:
+        packageType: 'runtime'
+        version: '2.x'
+
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonar-cloud-trivia'
+        organization: '2102-feb08-net'
+        scannerMode: 'MSBuild'
+        projectKey: '2102-feb08-net_TriviaRank-Server'
+        projectName: 'TriviaRank'
+        extraProperties: 'sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml'
+
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: dotnet build
+      workingDirectory: $(appDirectory)
+
+    - task: DotNetCoreCLI@2
+      displayName: dotnet test
+      inputs:
+        command: 'test'
+        arguments: '--configuration $(buildConfiguration) --collect "xplat code coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover'
+        workingDirectory: '$(appDirectory)'
+
+    - task: SonarCloudAnalyze@1
+      displayName: sonar run analysis
+
+    - task: SonarCloudPublish@1
+      displayName: publish sonar quality gate
+      inputs:
+        pollingTimeoutSec: '300'
+
+    - task: PublishCodeCoverageResults@1
+      displayName: publish code coverage report
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
