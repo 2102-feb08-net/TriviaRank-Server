@@ -33,7 +33,7 @@ namespace TriviaServer.Controllers
             return Ok(players);
         }
 
-        [HttpGet("api/player/{id}")]
+        [HttpGet("api/player/id/{id}")]
         public async Task<IActionResult> getPlayerById(int id)
         {
             PlayerModel player;
@@ -42,6 +42,21 @@ namespace TriviaServer.Controllers
                 player = await _playerRepo.getPlayerById(id);
             }
             catch(Exception e)
+            {
+                return StatusCode(500);
+            }
+            return Ok(player);
+        }
+
+        [HttpGet("api/player/username/{username}")]
+        public async Task<IActionResult> getPlayerByUsername(string username)
+        {
+            PlayerModel player;
+            try
+            {
+                player = await _playerRepo.getPlayerByUsername(username);
+            }
+            catch (Exception e)
             {
                 return StatusCode(500);
             }

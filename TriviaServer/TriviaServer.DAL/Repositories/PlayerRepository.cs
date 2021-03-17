@@ -17,6 +17,20 @@ namespace TriviaServer.DAL.Repositories
             _context = context;
         }
 
+        public async Task<PlayerModel> getPlayerByUsername(string username)
+        {
+            Player p = await _context.Players.FirstOrDefaultAsync(p => p.Username == username);
+            return new PlayerModel()
+            {
+                Id = p.Id,
+                Username = p.Username,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                Points = p.Points,
+                Birthday = p.Birthday
+            };
+        }
+
         /// <summary>
         /// Async function to find a player by his id. 
         /// </summary>
