@@ -26,11 +26,11 @@ namespace TriviaServer.Controllers
             {
                 messageId = await _messageRepo.createMessage(message.FromId, message.ToId, message.Body);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -45,7 +45,7 @@ namespace TriviaServer.Controllers
             {
                 messages = await _messageRepo.getLastNMessages(fromId, toId, amount);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -60,7 +60,7 @@ namespace TriviaServer.Controllers
             {
                 messages = await _messageRepo.getMessagesBetweenDate(fromId, toId, start, end);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
