@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TriviaServer.Models;
 using TriviaServer.Models.Repositories;
 
 namespace TriviaServer.DAL.Repositories
@@ -15,6 +16,28 @@ namespace TriviaServer.DAL.Repositories
         {
             _context = context;
         }
+
+        public async Task AddPlayerToGame(int gameId, int playerId)
+        {
+            GamePlayer gamePlayer = new GamePlayer
+            {
+                GameId = gameId,
+                PlayerId = playerId,
+                TotalCorrect = 0
+            };
+
+            await _context.GamePlayers.AddAsync(gamePlayer);
+        }
+
+        public async Task UpdatePlayerScore(int gameId, int playerId, int score)
+        {
+            var player = await _context.GamePlayers.FirstOrDefaultAsync(p => p.PlayerId == playerId);
+            player.TotalCorrect = score;
+            _context.Update(player);
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
         {
             Game newGame = new Game

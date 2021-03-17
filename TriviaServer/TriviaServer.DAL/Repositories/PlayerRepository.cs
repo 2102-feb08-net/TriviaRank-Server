@@ -70,7 +70,12 @@ namespace TriviaServer.DAL.Repositories
             var currentPlayer = await _context.Players
                 .Include(p => p.FriendPlayers)
                 .FirstOrDefaultAsync(p => p.Id == id);
-            return currentPlayer.FriendPlayers.Select(p => p.FriendId);
+            var friendsOfPlayer = await _context.Friends
+                .Where(f => f.FriendId == id)
+                .Select(f => f.PlayerId)
+                .ToListAsync();
+
+            return friendsOfPlayer.Union(currentPlayer.FriendPlayers.Select(p => p.FriendId));
         }
 
         public async Task<int> createPlayer(PlayerModel player)
@@ -98,6 +103,22 @@ namespace TriviaServer.DAL.Repositories
             };
             await _context.AddAsync(friend);
             await saveAsync();
+        }
+
+        public async Task deleteFriend(int playerId, int friendId)
+        {
+            var playerSide = _context.Friends.FirstOrDefault(f => f.PlayerId == playerId && f.FriendId == friendId);
+            var friendSide = _context.Friends.FirstOrDefault(f => f.PlayerId == friendId && f.FriendId == playerId);
+
+            if (playerSide != null)
+            {
+                _context.Friends.Remove(playerSide);
+            }
+            if (friendSide != null)
+            {
+                _context.Friends.Remove(friendSide);
+            }
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>

@@ -116,5 +116,19 @@ namespace TriviaServer.Controllers
             }
             return Ok();
         }
+
+        [HttpDelete("api/player/{playerId}/friend/{friendId}")]
+        public async Task<IActionResult> deleteFriend(int playerId, int friendId)
+        {
+            try
+            {
+                await _playerRepo.deleteFriend(playerId, friendId);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
     }
 }

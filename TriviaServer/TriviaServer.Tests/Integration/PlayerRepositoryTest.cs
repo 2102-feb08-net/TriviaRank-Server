@@ -103,7 +103,7 @@ namespace TriviaServer.Tests.Integration
                 FirstName = "Test1",
                 LastName = "Player1"
             };
-            var insertedFriend1 = new Player
+            var insertedFriend2 = new Player
             {
                 Username = "testusername020202",
                 Password = "password",
@@ -112,7 +112,7 @@ namespace TriviaServer.Tests.Integration
                 FirstName = "Test2",
                 LastName = "Player2"
             };
-            var insertedFriend2 = new Player
+            var insertedFriend3 = new Player
             {
                 Username = "testusername030303",
                 Password = "password",
@@ -123,17 +123,17 @@ namespace TriviaServer.Tests.Integration
             };
             var numPlayersBefore = context.Players.Count();
             await context.Players.AddAsync(insertedPlayer1);
-            await context.Players.AddAsync(insertedFriend1);
             await context.Players.AddAsync(insertedFriend2);
+            await context.Players.AddAsync(insertedFriend3);
             context.SaveChanges();
 
 
             var repo = new PlayerRepository(context);
-            await repo.createFriend(insertedPlayer1.Id, insertedFriend1.Id);
             await repo.createFriend(insertedPlayer1.Id, insertedFriend2.Id);
+            await repo.createFriend(insertedFriend2.Id, insertedFriend3.Id);
 
 
-            Assert.Equal(2, (await repo.getFriendsOfPlayer(insertedPlayer1.Id)).Count());
+            Assert.Equal(2, (await repo.getFriendsOfPlayer(insertedFriend2.Id)).Count());
         }
 
     }
