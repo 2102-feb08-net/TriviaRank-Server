@@ -9,7 +9,7 @@ trigger:
     - main
   paths:
     include:
-    - TriviaRank-Server/TriviaServer
+    - TriviaServer
 
 pr:
 - main
@@ -22,7 +22,7 @@ stages:
 
   variables:
     buildConfiguration: Release
-    appDirectory: TriviaRank-Server/TriviaServer
+    appDirectory: TriviaServer
 
   jobs:
   - job: build
