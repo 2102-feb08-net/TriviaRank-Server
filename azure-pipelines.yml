@@ -30,11 +30,9 @@ steps:
     projectName: 'TriviaRank'
     extraProperties: 'sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml'
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: 'build'
-    arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration $(buildConfiguration)
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+  workingDirectory: StoreApp
 
 - task: DotNetCoreCLI@2
   displayName: Test
