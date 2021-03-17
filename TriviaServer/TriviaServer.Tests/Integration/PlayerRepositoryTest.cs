@@ -136,5 +136,67 @@ namespace TriviaServer.Tests.Integration
             Assert.Equal(2, (await repo.getFriendsOfPlayer(insertedFriend2.Id)).Count());
         }
 
+        [Fact]
+        public async Task CheckValidPlayerGames()
+        {
+            using var contextFactory = new TestTriviaGameContextFactory();
+            using TriviaRankContext context = contextFactory.CreateContext();
+
+            var insertedPlayer1 = new Player
+            {
+                Username = "testusername010101",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Test1",
+                LastName = "Player1"
+            };
+            var insertedPlayer2 = new Player
+            {
+                Username = "testusername020202",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Test1",
+                LastName = "Player1"
+            };
+            await context.Players.AddAsync(insertedPlayer1);
+            await context.Players.AddAsync(insertedPlayer2);
+            context.SaveChanges();
+            var insertedGame1 = new Game
+            {
+                GameName = "randomGame",
+                OwnerId = insertedPlayer1.Id,
+                StartDate = DateTimeOffset.Now,
+                EndDate = DateTimeOffset.Now,
+                GameMode = true,
+                TotalQuestions = 10,
+                IsPublic = true
+            };
+            await context.Games.AddAsync(insertedGame1);
+            context.SaveChanges();
+            var insertedGamePlayer1 = new GamePlayer
+            {
+                GameId = insertedGame1.Id,
+                PlayerId = insertedPlayer2.Id,
+                TotalCorrect = 8
+            };
+            await context.GamePlayers.AddAsync(insertedGamePlayer1);
+            context.SaveChanges();
+
+            var repo = new PlayerRepository(context);
+            GameModel createdGame = (await repo.getPlayerGames(insertedPlayer2.Id, null)).FirstOrDefault();
+
+
+            Assert.Equal(insertedGame1.Id, createdGame.Id);
+            Assert.Equal(insertedGame1.GameName, createdGame.GameName);
+            Assert.Equal(insertedGame1.OwnerId, createdGame.OwnerId);
+            Assert.Equal(insertedGame1.StartDate, createdGame.StartDate);
+            Assert.Equal(insertedGame1.EndDate, createdGame.EndDate);
+            Assert.Equal(insertedGame1.GameMode, createdGame.GameMode);
+            Assert.Equal(insertedGame1.TotalQuestions, createdGame.TotalQuestions);
+            Assert.Equal(insertedGame1.IsPublic, createdGame.IsPublic);
+        }
+
     }
 }
