@@ -37,7 +37,7 @@ namespace TriviaServer.Controllers
             return Ok(messageId);
         }
 
-        [HttpGet("api/messages/from/{fromId}/to/{toId}/amount/{amount}")]
+        [HttpGet("api/messages/player/{fromId}/friend/{toId}/amount/{amount}")]
         public async Task<IActionResult> getNMessages(int fromId, int toId, int amount)
         {
             IEnumerable<MessageModel> messages;
@@ -52,7 +52,7 @@ namespace TriviaServer.Controllers
             return Ok(messages);
         }
 
-        [HttpGet("api/messages/from/{fromId}/to/{toId}/start/{start}/end/{end}")]
+        [HttpGet("api/messages/player/{fromId}/friend/{toId}/start/{start}/end/{end}")]
         public async Task<IActionResult> getMessageInDateRange(int fromId, int toId, DateTimeOffset start, DateTimeOffset end)
         {
             List<MessageModel> messages;

@@ -84,7 +84,7 @@ namespace TriviaServer.Controllers
             return Ok(playerId);
         }
 
-        [HttpPost("api/friend/{playerId}/{friendId}")]
+        [HttpPost("api/player/{playerId}/friend/{friendId}")]
         public async Task<IActionResult> createFriend(int playerId, int friendId)
         {
             try

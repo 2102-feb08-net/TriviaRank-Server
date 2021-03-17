@@ -61,12 +61,6 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<int> createPlayer(PlayerModel player)
         {
-            var playerExists = await _context.Players.FirstOrDefaultAsync(p => p.Username == player.Username) != null;
-            if (playerExists)
-            {
-                throw new InvalidOperationException("invalid client operation.");
-            }
-
             Player newPlayer = new Player()
             {
                 FirstName = player.FirstName,
@@ -83,13 +77,6 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task createFriend(int playerId, int friendId)
         {
-            var playerExists = await _context.Players.FirstOrDefaultAsync(p => p.Id == playerId) != null;
-            var friendExists = await _context.Players.FirstOrDefaultAsync(p => p.Id == friendId) != null;
-            if (playerExists || friendExists)
-            {
-                throw new InvalidOperationException("invalid client operation.");
-            }
-
             Friend friend = new Friend()
             {
                 PlayerId = playerId,
