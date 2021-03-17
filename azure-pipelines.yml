@@ -21,7 +21,7 @@ steps:
     SonarCloud: 'sonar-cloud-trivia'
     organization: '2102-feb08-net'
     scannerMode: 'MSBuild'
-    projectKey: '2102-feb08-net_team1-p2-server'
+    projectKey: '2102-feb08-net_TriviaRank-Server'
     projectName: 'TriviaRank'
     extraProperties: 'sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml'
 
