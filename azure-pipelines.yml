@@ -39,6 +39,7 @@ steps:
   inputs:
     command: test
     arguments: '--configuration $(buildConfiguration) --collect "xplat code coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover'
+    workingDirectory: 'TriviaServer/TriviaServer.Tests'
     publishTestResults: true
 
 - task: SonarCloudAnalyze@1
