@@ -8,7 +8,7 @@ using TriviaServer.Models.Repositories;
 
 namespace TriviaServer.DAL.Repositories
 {
-    class GameRepository : IGameRepository
+    public class GameRepository : IGameRepository
     {
         private readonly TriviaRankContext _context;
         public GameRepository(TriviaRankContext context)
