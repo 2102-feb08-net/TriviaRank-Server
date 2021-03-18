@@ -133,5 +133,16 @@ namespace TriviaServer.Tests.Integration
             Assert.Equal(insertedGame.TotalQuestions, dbGame.TotalQuestions);
             Assert.Equal(insertedGame.IsPublic, dbGame.IsPublic);
         }
+
+        public async Task SearchAllGames_GameIsValid_Success()
+        {
+            //arrange
+            
+            //act
+
+            //assert
+
+
+        }
     }
 }

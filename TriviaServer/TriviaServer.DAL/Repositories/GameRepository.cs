@@ -38,6 +38,32 @@ namespace TriviaServer.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<GameModel>> SearchAllGames()
+        {
+            var dbGames = await _context.Games
+                .Where(x => x.EndDate != '1900/01/01*' && x.IsPublic == true)
+                .ToListAsync();
+
+            List<GameModel> gameList = new List<GameModel>();
+
+            foreach(var game in dbGames)
+            {
+                var eachGame = new GameModel
+                {
+                    Id = dbGames.Id,
+                    GameName = dbGames.GameName,
+                    OwnerId = dbGames.OwnerId,
+                    StartDate = dbGames.StartDate,
+                    EndDate = dbGames.EndDate,
+                    GameMode = dbGames.GameMode,
+                    IsPublic = dbGames.IsPublic,
+                    TotalQuestions = dbGames.TotalQuestions
+                };
+                gameList.Add(eachGame);
+            }
+            return gameList;
+        }
+
         public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
         {
             Game newGame = new Game
