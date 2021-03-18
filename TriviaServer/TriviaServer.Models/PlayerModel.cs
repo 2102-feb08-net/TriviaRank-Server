@@ -12,12 +12,84 @@ namespace TriviaServer.Models
   {
     const int NAME_LIMIT = 50;
 
-    public string Username { get; set; }
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public DateTimeOffset Birthday { get; set; }
-    public int Points { get; set; }
+    public string Username
+    {
+      get => Username;
+      set
+      {
+        if (StringIsOnlyAlphaNumberic(value))
+        {
+          Username = value;
+        }
+        else
+        {
+          throw new ArgumentException("Username is not alphanumeric");
+        }
+      }
+    }
+    public int Id
+    {
+      get => Id;
+      set
+      {
+        if (value > 0)
+        {
+          Id = value;
+        }
+        else
+        {
+          throw new ArgumentException("Id is invalid");
+        }
+      }
+    }
+    public string FirstName
+    {
+      get => FirstName;
+      set
+      {
+        if (StringIsValidName(value))
+        {
+          FirstName = value;
+        }
+        else
+        {
+          throw new ArgumentException("Invalid First name");
+        }
+      }
+    }
+    public string LastName
+    {
+      get => LastName;
+
+      set
+      {
+        if (StringIsValidName(value))
+        {
+          LastName = value;
+        }
+        else
+        {
+          throw new ArgumentException("Invalid First name");
+        }
+      }
+    }
+    public DateTimeOffset Birthday
+    {
+      // I'll do this later
+      get => Birthday;
+      set => Birthday = value;
+    }
+    public int Points
+    {
+      get => Points;
+      set
+      {
+        if (value > -1)
+        {
+          Points = value;
+        }
+      }
+    }
 
     /// <summary>
     /// Returns true is string is alphanumberic and is one character or longer
@@ -60,9 +132,7 @@ namespace TriviaServer.Models
       {
         return false;
       }
-
       return true;
     }
-
   }
 }
