@@ -134,15 +134,23 @@ namespace TriviaServer.Tests.Integration
             Assert.Equal(insertedGame.IsPublic, dbGame.IsPublic);
         }
 
+        [Fact]
         public async Task SearchAllGames_GameIsValid_Success()
         {
             //arrange
-            
+            using var contextfactory = new TestTriviaGameContextFactory();
+            using TriviaRankContext context = contextfactory.CreateContext();
+            var repo = new GameRepository(context);
+            var dbGames = new List<GameModel>();
+
             //act
+            dbGames = await repo.SearchAllGames();
 
             //assert
-
+            Assert.NotEmpty(dbGames);
 
         }
+
+
     }
 }

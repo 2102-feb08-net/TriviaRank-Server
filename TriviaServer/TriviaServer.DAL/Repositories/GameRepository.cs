@@ -41,7 +41,7 @@ namespace TriviaServer.DAL.Repositories
         public async Task<List<GameModel>> SearchAllGames()
         {
             var dbGames = await _context.Games
-                .Where(x => x.EndDate != '1900/01/01*' && x.IsPublic == true)
+                .Where(x => x.EndDate == DateTime.MinValue && x.IsPublic == true)
                 .ToListAsync();
 
             List<GameModel> gameList = new List<GameModel>();
@@ -50,14 +50,14 @@ namespace TriviaServer.DAL.Repositories
             {
                 var eachGame = new GameModel
                 {
-                    Id = dbGames.Id,
-                    GameName = dbGames.GameName,
-                    OwnerId = dbGames.OwnerId,
-                    StartDate = dbGames.StartDate,
-                    EndDate = dbGames.EndDate,
-                    GameMode = dbGames.GameMode,
-                    IsPublic = dbGames.IsPublic,
-                    TotalQuestions = dbGames.TotalQuestions
+                    Id = game.Id,
+                    GameName = game.GameName,
+                    OwnerId = game.OwnerId,
+                    StartDate = game.StartDate,
+                    EndDate = game.EndDate,
+                    GameMode = game.GameMode,
+                    IsPublic = game.IsPublic,
+                    TotalQuestions = game.TotalQuestions
                 };
                 gameList.Add(eachGame);
             }
