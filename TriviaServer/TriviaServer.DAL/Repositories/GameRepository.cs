@@ -41,7 +41,7 @@ namespace TriviaServer.DAL.Repositories
         public async Task<List<GameModel>> SearchAllGames()
         {
             var dbGames = await _context.Games
-                .Where(x => x.EndDate == DateTime.MinValue && x.IsPublic == true)
+                .Where(x => x.EndDate < DateTime.Now && x.IsPublic == true)
                 .ToListAsync();
 
             List<GameModel> gameList = new List<GameModel>();
@@ -64,14 +64,14 @@ namespace TriviaServer.DAL.Repositories
             return gameList;
         }
 
-        public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
+        public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic, double duration)
         {
             Game newGame = new Game
             {
                 GameName = gameName,
                 OwnerId = ownerId,
                 StartDate = DateTime.Now,
-                EndDate = DateTime.MinValue,
+                EndDate = DateTimeOffset.Now.AddMinutes(duration),
                 TotalQuestions = totalQuestions,
                 IsPublic = isPublic
             };
