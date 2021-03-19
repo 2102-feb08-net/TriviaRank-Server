@@ -12,6 +12,8 @@ namespace TriviaServer.Models.Repositories
         public Task<List<GameModel>> getGameInvites(int currentPlayer);
         public Task<int> createFriendInvite(int playerId, int friendId);
         public Task<int> createFriendInvite(string playerUsername, string friendUsername);
+
+        public Task deleteFriendInvite(string playerUsername, string friendUsername);
         public Task<int> createGameInvite(int gameId, int playerId);
     }
 }

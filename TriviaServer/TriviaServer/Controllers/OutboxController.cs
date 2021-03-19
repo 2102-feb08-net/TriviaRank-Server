@@ -104,5 +104,24 @@ namespace TriviaServer.Controllers
             }
             return Ok(obxId);
         }
+
+        [HttpDelete("api/outbox/playerUsername/{playerUsername}/friendUsername/{friendUsername}")]
+        public async Task<IActionResult> deleteFriendInviteUsername(string playerUsername, string friendUsername)
+        {
+            int obxId;
+            try
+            {
+                await _outboxRepo.deleteFriendInvite(playerUsername, friendUsername);
+            }
+            catch (InvalidOperationException)
+            {
+                return StatusCode(400);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
     }
 }
