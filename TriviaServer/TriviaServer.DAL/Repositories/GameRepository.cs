@@ -9,7 +9,7 @@ using TriviaServer.Models.Repositories;
 
 namespace TriviaServer.DAL.Repositories
 {
-    class GameRepository : IGameRepository
+    public class GameRepository : IGameRepository
     {
         private readonly TriviaRankContext _context;
         public GameRepository(TriviaRankContext context)
@@ -38,6 +38,32 @@ namespace TriviaServer.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<GameModel>> SearchAllGames()
+        {
+            var dbGames = await _context.Games
+                .Where(x => x.EndDate == DateTime.MinValue && x.IsPublic == true)
+                .ToListAsync();
+
+            List<GameModel> gameList = new List<GameModel>();
+
+            foreach(var game in dbGames)
+            {
+                var eachGame = new GameModel
+                {
+                    Id = game.Id,
+                    GameName = game.GameName,
+                    OwnerId = game.OwnerId,
+                    StartDate = game.StartDate,
+                    EndDate = game.EndDate,
+                    GameMode = game.GameMode,
+                    IsPublic = game.IsPublic,
+                    TotalQuestions = game.TotalQuestions
+                };
+                gameList.Add(eachGame);
+            }
+            return gameList;
+        }
+
         public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
         {
             Game newGame = new Game
@@ -45,6 +71,7 @@ namespace TriviaServer.DAL.Repositories
                 GameName = gameName,
                 OwnerId = ownerId,
                 StartDate = DateTime.Now,
+                EndDate = DateTime.MinValue,
                 TotalQuestions = totalQuestions,
                 IsPublic = isPublic
             };
@@ -58,13 +85,14 @@ namespace TriviaServer.DAL.Repositories
                 GameName = newGame.GameName,
                 OwnerId = newGame.OwnerId,
                 StartDate = newGame.StartDate,
+                EndDate = newGame.EndDate,
                 TotalQuestions = newGame.TotalQuestions,
                 IsPublic = newGame.IsPublic
             };
             return appGame;
         }
 
-        public void EndGame(Models.GameModel appGame)
+        public async Task EndGame(Models.GameModel appGame)
         {
             Game endGame = _context.Games
                 .Where(x => x.Id == appGame.Id).First();
@@ -72,7 +100,7 @@ namespace TriviaServer.DAL.Repositories
             endGame.EndDate = DateTime.Now;
 
             _context.Update(endGame);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Models.GameModel> SearchGames(int appGameID)
