@@ -48,13 +48,32 @@ namespace TriviaServer.Controllers
             return Ok(games);
         }
 
-        [HttpPost("api/outbox/friend/{playerId}/{friendId}")]
-        public async Task<IActionResult> createFriendInvite(int playerId, int friendId)
+        [HttpPost("api/outbox/playerId/{playerId}/friendId/{friendId}")]
+        public async Task<IActionResult> createFriendInviteId(int playerId, int friendId)
         {
             int obxId;
             try
             {
                 obxId = await _outboxRepo.createFriendInvite(playerId, friendId);
+            }
+            catch (InvalidOperationException)
+            {
+                return StatusCode(400);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok(obxId);
+        }
+
+        [HttpPost("api/outbox/playerUsername/{playerUsername}/friendUsername/{friendUsername}")]
+        public async Task<IActionResult> createFriendInviteUsername(string playerUsername, string friendUsername)
+        {
+            int obxId;
+            try
+            {
+                obxId = await _outboxRepo.createFriendInvite(playerUsername, friendUsername);
             }
             catch (InvalidOperationException)
             {
