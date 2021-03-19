@@ -71,6 +71,7 @@ namespace TriviaServer.DAL.Repositories
                 GameName = gameName,
                 OwnerId = ownerId,
                 StartDate = DateTime.Now,
+                EndDate = DateTime.MinValue,
                 TotalQuestions = totalQuestions,
                 IsPublic = isPublic
             };
@@ -84,6 +85,7 @@ namespace TriviaServer.DAL.Repositories
                 GameName = newGame.GameName,
                 OwnerId = newGame.OwnerId,
                 StartDate = newGame.StartDate,
+                EndDate = newGame.EndDate,
                 TotalQuestions = newGame.TotalQuestions,
                 IsPublic = newGame.IsPublic
             };

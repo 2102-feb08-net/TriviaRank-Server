@@ -140,6 +140,55 @@ namespace TriviaServer.Tests.Integration
             //arrange
             using var contextfactory = new TestTriviaGameContextFactory();
             using TriviaRankContext context = contextfactory.CreateContext();
+
+            var insertOwner = new Player
+            {
+                Username = "gameOwner1",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Test",
+                LastName = "Player"
+
+            };
+
+            await context.AddAsync(insertOwner);
+            context.SaveChanges();
+
+            var insertedGames = new List<Game>();
+
+            for(var i = 1; i < 5; i++)
+            {
+                var game = new Game
+                {
+                    GameName = "CoolGameDude" + i,
+                    GameMode = true,
+                    OwnerId = 1,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.MinValue,
+                    TotalQuestions = i + 10,
+                    IsPublic = true
+                };
+                await context.AddAsync(game);
+            }
+
+            for (var i = 1; i < 5; i++)
+            {
+                var game = new Game
+                {
+                    GameName = "CoolGameDude" + i,
+                    GameMode = true,
+                    OwnerId = 1,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now,
+                    TotalQuestions = i + 10,
+                    IsPublic = true
+                };
+                await context.AddAsync(game);
+            }
+
+            context.SaveChanges();
+
             var repo = new GameRepository(context);
             var dbGames = new List<GameModel>();
 
