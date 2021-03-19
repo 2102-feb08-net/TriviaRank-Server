@@ -35,6 +35,7 @@ namespace TriviaServer.Models
     {
       this._id = id;
       this._gameName = gameName;
+      this._ownerId = ownerId;
       this._startDate = startDate;
       this._endDate = endDate;
       this._gameMode = gameMode;
