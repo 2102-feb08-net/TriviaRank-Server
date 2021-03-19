@@ -38,7 +38,7 @@ namespace TriviaServer.Tests.Integration
             
             //act
             var repo = new GameRepository(context);
-            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true);
+            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true, 20.0);
 
 
             //assert
@@ -77,7 +77,7 @@ namespace TriviaServer.Tests.Integration
             context.SaveChanges();
 
             var repo = new GameRepository(context);
-            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true);
+            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true, 20.0);
 
             //act
             var game = (await repo.SearchGames(1));
@@ -116,7 +116,7 @@ namespace TriviaServer.Tests.Integration
             context.SaveChanges();
 
             var repo = new GameRepository(context);
-            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true);
+            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true, 20.0);
 
             //act
             await repo.EndGame(insertedGame);
@@ -164,8 +164,8 @@ namespace TriviaServer.Tests.Integration
                     GameName = "CoolGameDude" + i,
                     GameMode = true,
                     OwnerId = 1,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.MinValue,
+                    StartDate = DateTimeOffset.Now,
+                    EndDate = DateTimeOffset.Now.AddMinutes(20.0),
                     TotalQuestions = i + 10,
                     IsPublic = true
                 };
@@ -179,8 +179,8 @@ namespace TriviaServer.Tests.Integration
                     GameName = "CoolGameDude" + i,
                     GameMode = true,
                     OwnerId = 1,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now,
+                    StartDate = DateTimeOffset.Now,
+                    EndDate = DateTimeOffset.Now,
                     TotalQuestions = i + 10,
                     IsPublic = true
                 };

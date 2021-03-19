@@ -40,8 +40,10 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task<List<GameModel>> SearchAllGames()
         {
+            DateTimeOffset _now = DateTimeOffset.Now;
+
             var dbGames = await _context.Games
-                .Where(x => x.EndDate == DateTime.MinValue && x.IsPublic == true)
+                .Where(x => DateTimeOffset.Compare(x.EndDate, _now) > 0 && x.IsPublic == true)
                 .ToListAsync();
 
             List<GameModel> gameList = new List<GameModel>();
@@ -64,19 +66,30 @@ namespace TriviaServer.DAL.Repositories
             return gameList;
         }
 
-        public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic)
+        public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic, double duration)
         {
             Game newGame = new Game
             {
                 GameName = gameName,
                 OwnerId = ownerId,
                 StartDate = DateTime.Now,
-                EndDate = DateTime.MinValue,
+                EndDate = DateTimeOffset.Now.AddMinutes(duration),
                 TotalQuestions = totalQuestions,
                 IsPublic = isPublic
             };
 
             await _context.AddAsync(newGame);
+            await _context.SaveChangesAsync();
+
+            var owner = await _context.GamePlayers.ToListAsync();
+
+            var player = new GamePlayer
+            {
+                GameId = newGame.Id,
+                PlayerId = ownerId
+            };
+
+            await _context.AddAsync(player);
             await _context.SaveChangesAsync();
 
             Models.GameModel appGame = new Models.GameModel
@@ -107,9 +120,11 @@ namespace TriviaServer.DAL.Repositories
         {
             try
             {
+                DateTimeOffset _now = DateTimeOffset.Now;
+
                 Game gameQuery = await _context.Games.Where(x => x.Id == appGameID).FirstAsync();
 
-                if (gameQuery.EndDate < DateTime.Now && gameQuery.IsPublic == true)
+                if (DateTimeOffset.Compare(gameQuery.EndDate, _now) > 0 && gameQuery.IsPublic == true)
                 {
                     Models.GameModel appGame = new Models.GameModel
                     {
@@ -117,6 +132,7 @@ namespace TriviaServer.DAL.Repositories
                         GameName = gameQuery.GameName,
                         OwnerId = gameQuery.OwnerId,
                         StartDate = gameQuery.StartDate,
+                        EndDate = gameQuery.EndDate,
                         TotalQuestions = gameQuery.TotalQuestions,
                         IsPublic = gameQuery.IsPublic
                     };
