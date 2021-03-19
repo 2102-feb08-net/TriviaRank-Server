@@ -79,6 +79,17 @@ namespace TriviaServer.DAL.Repositories
             await _context.AddAsync(newGame);
             await _context.SaveChangesAsync();
 
+            var owner = await _context.GamePlayers.ToListAsync();
+
+            var player = new GamePlayer
+            {
+                GameId = newGame.Id,
+                PlayerId = ownerId
+            };
+
+            await _context.AddAsync(player);
+            await _context.SaveChangesAsync();
+
             Models.GameModel appGame = new Models.GameModel
             {
                 Id = newGame.Id,
