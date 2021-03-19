@@ -19,6 +19,13 @@ namespace TriviaServer.Controllers
             _gameRepo = gameRepo;
         }
 
+        [HttpGet("/api/games")]
+        public async Task<IActionResult> GetAllGames()
+        {
+            List<GameModel> dbGames = await _gameRepo.GetAllGames();
+
+            return Ok(dbGames);
+        }
 
 
         [HttpGet("api/game/{id}")]
