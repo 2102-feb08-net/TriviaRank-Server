@@ -18,6 +18,22 @@ namespace TriviaServer.Controllers
             _playerRepo = playerRepo;
         }
 
+
+        [HttpGet("api/player/{playerId}/games")]
+        public async Task<IActionResult> getPlayerGames(int playerId)
+        {
+            IEnumerable<GameModel> games;
+            try
+            {
+                games = await _playerRepo.getPlayerGames(playerId, null);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok(games);
+        }
+
         [HttpGet("api/player/friend/{id}")]
         public async Task<IActionResult> getPlayerFriends(int id)
         {
@@ -26,7 +42,7 @@ namespace TriviaServer.Controllers
             {
                 players = await _playerRepo.getFriendsOfPlayer(id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -41,7 +57,7 @@ namespace TriviaServer.Controllers
             {
                 player = await _playerRepo.getPlayerById(id);
             }
-            catch(Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -56,7 +72,7 @@ namespace TriviaServer.Controllers
             {
                 player = await _playerRepo.getPlayerByUsername(username);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -73,7 +89,7 @@ namespace TriviaServer.Controllers
                 var players = await _playerRepo.getAllPlayers();
                 sortedPlayers = players.OrderBy(p => p.Id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -88,11 +104,11 @@ namespace TriviaServer.Controllers
             {
                 playerId = await _playerRepo.createPlayer(newPlayer);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
@@ -106,15 +122,30 @@ namespace TriviaServer.Controllers
             {
                 await _playerRepo.createFriend(playerId, friendId);
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return StatusCode(400);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(500);
             }
             return Ok();
         }
+
+        [HttpDelete("api/player/{playerId}/friend/{friendId}")]
+        public async Task<IActionResult> deleteFriend(int playerId, int friendId)
+        {
+            try
+            {
+                await _playerRepo.deleteFriend(playerId, friendId);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
+
     }
 }

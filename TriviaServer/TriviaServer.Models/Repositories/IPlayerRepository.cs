@@ -19,6 +19,8 @@ namespace TriviaServer.Models.Repositories
         public Task<IEnumerable<int>> getFriendsOfPlayer(int id);
         public Task<int> createPlayer(PlayerModel player);
         public Task createFriend(int playerId, int friendId);
+        public Task deleteFriend(int playerId, int friendId);
+        public Task<IEnumerable<GameModel>> getPlayerGames(int playerId, bool? isActive);
 
         /// <summary>
         /// Save changes async
