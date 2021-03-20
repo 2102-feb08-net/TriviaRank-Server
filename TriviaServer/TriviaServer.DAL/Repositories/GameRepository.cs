@@ -130,10 +130,10 @@ namespace TriviaServer.DAL.Repositories
             return appGame;
         }
 
-        public async Task EndGame(Models.GameModel appGame)
+        public async Task EndGame(int Id)
         {
             Game endGame = _context.Games
-                .Where(x => x.Id == appGame.Id).First();
+                .Where(x => x.Id == Id).First();
 
             endGame.EndDate = DateTime.Now;
 
