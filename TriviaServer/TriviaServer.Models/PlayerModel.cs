@@ -51,7 +51,13 @@ namespace TriviaServer.Models
     public string Password
     {
       get => _password;
-      set => _password = value;
+      set
+      {
+        if (value.Length > 0)
+        {
+          _password = value;
+        }
+      }
     }
     public int Id
     {
