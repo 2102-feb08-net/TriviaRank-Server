@@ -8,6 +8,7 @@ namespace TriviaServer.Models
 {
   public class GameModel
   {
+    const int NAME_LENGTH_LIMIT = 50;
     private int _id;
     private string _gameName;
 
@@ -63,7 +64,7 @@ namespace TriviaServer.Models
       get => _gameName;
       set
       {
-        if (value.Length > 0)
+        if (isGameNameOkay(value))
         {
           _gameName = value;
         }
@@ -123,6 +124,27 @@ namespace TriviaServer.Models
     {
       get => _isPublic;
       set => _isPublic = value;
+    }
+
+    public bool isGameNameOkay(string gameName)
+    {
+      if (gameName.Length == 0 || gameName.Length > NAME_LENGTH_LIMIT)
+      {
+        return false;
+      }
+      return true;
+
+      // throw new NotImplementedException("Not finished");
+    }
+
+    public bool isIdFromDataBaseValid(int number)
+    {
+      if (number <= 1)
+      {
+        return false;
+      }
+
+      return true;
     }
   }
 }

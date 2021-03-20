@@ -31,6 +31,39 @@ namespace TriviaServer.DAL.Repositories
             return fObx.Id;
         }
 
+        public async Task<int> createFriendInvite(string playerUsername, string friendUsername)
+        {
+            Player player = await _context.Players.FirstOrDefaultAsync(p => p.Username == playerUsername);
+            Player friend = await _context.Players.FirstOrDefaultAsync(p => p.Username == friendUsername);
+            FriendInviteOutbox fObx = new FriendInviteOutbox()
+            {
+                InviterId = player.Id,
+                InvitedId = friend.Id,
+                Date = DateTimeOffset.Now
+            };
+
+            await _context.AddAsync(fObx);
+            await saveAsync();
+            return fObx.Id;
+        }
+
+        public async Task deleteFriendInvite(string playerUsername, string friendUsername)
+        {
+            Player player = await _context.Players.FirstOrDefaultAsync(p => p.Username == playerUsername);
+            Player friend = await _context.Players.FirstOrDefaultAsync(p => p.Username == friendUsername);
+            List<FriendInviteOutbox> invites = await _context.FriendInviteOutboxes
+                .Where(o => o.InvitedId == player.Id && o.InviterId == friend.Id)
+                    .Union(_context.FriendInviteOutboxes.Where(o => o.InviterId == player.Id && o.InvitedId == friend.Id))
+                    .ToListAsync();
+
+            foreach (var invite in invites)
+            {
+                _context.FriendInviteOutboxes.Remove(invite);
+            }
+
+            await saveAsync();
+        }
+
         public async Task<int> createGameInvite(int gameId, int playerId)
         {
             GameInviteOutbox gObx = new GameInviteOutbox()

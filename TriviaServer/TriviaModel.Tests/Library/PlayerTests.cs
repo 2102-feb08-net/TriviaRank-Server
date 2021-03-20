@@ -75,6 +75,7 @@ namespace TriviaServer.Tests
     [Theory]
     [InlineData("jack")]
     [InlineData("Jack1")]
+    [InlineData("J@ck")]
     [InlineData("")]
     [InlineData("Thisisatributetothegreatestandlongestnameinthewholewideworld")]
     [InlineData("Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy")]

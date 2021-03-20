@@ -35,8 +35,8 @@ namespace TriviaServer
         options.AddDefaultPolicy(
                   builder =>
                   {
-                    builder.WithOrigins("http://localhost:4200");
-                  });
+                builder.WithOrigins("http://localhost:4200").AllowAnyMethod();
+              });
       });
 
       string connectionString = Configuration["ConnectionStrings:TriviaDb"];
