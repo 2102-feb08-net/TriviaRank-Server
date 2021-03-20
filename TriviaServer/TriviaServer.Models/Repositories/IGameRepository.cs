@@ -16,5 +16,6 @@ namespace TriviaServer.Models.Repositories
         public Task AddPlayerToGame(int gameId, int playerId);
         public Task EndGame(GameModel appGame);
         public Task UpdatePlayerScore(int gameId, int playerId, int score);
+        public Task<int> AddPlayerToGame(int gameId, PlayerModel player);
     }
 }

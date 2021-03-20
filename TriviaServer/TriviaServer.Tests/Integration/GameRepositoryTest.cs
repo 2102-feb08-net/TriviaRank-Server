@@ -200,6 +200,72 @@ namespace TriviaServer.Tests.Integration
 
         }
 
+        [Fact]
+        public async Task CreatePlayer_PlayerIsValid_Success()
+        {
+            //arrange
+            using var contextfactory = new TestTriviaGameContextFactory();
+            using TriviaRankContext context = contextfactory.CreateContext();
 
+            var insertOwner = new Player
+            {
+                Username = "gameOwner1",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Test",
+                LastName = "Player"
+
+            };
+            var insertPlayer = new Player
+            {
+                Username = "gamePlayer1",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "TestPlayer",
+                LastName = "Playerlastname"
+
+            };
+
+            await context.AddAsync(insertOwner);
+            await context.AddAsync(insertPlayer);
+            await context.SaveChangesAsync();
+
+            var insertPlayerModel = new PlayerModel
+            {
+                Id = insertPlayer.Id,
+                Username = insertPlayer.Username,
+                Password = insertPlayer.Password,
+                Birthday = insertPlayer.Birthday,
+                Points = insertPlayer.Points,
+                FirstName = insertPlayer.FirstName,
+                LastName = insertPlayer.LastName
+            };
+
+            var game = new Game
+            {
+                GameName = "testgame1",
+                GameMode = true,
+                OwnerId = insertOwner.Id,
+                StartDate = DateTimeOffset.Now,
+                EndDate = DateTimeOffset.Now.AddMinutes(20.0),
+                TotalQuestions = 10,
+                IsPublic = true
+            };
+            await context.AddAsync(game);
+            await context.SaveChangesAsync();
+
+            var repo = new GameRepository(context);
+
+            //act
+
+            var insertedId = await repo.AddPlayerToGame(game.Id, insertPlayerModel);
+            var gp = await context.GamePlayers.Where(gp => gp.PlayerId == insertPlayer.Id).FirstOrDefaultAsync();
+
+            //assert
+            Assert.Equal(insertedId, gp.Id);
+
+        }
     }
 }
