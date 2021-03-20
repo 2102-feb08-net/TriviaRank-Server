@@ -53,14 +53,27 @@ CREATE TABLE GamePlayers
 -- Question s in the game
 CREATE TABLE Question
 (
-    Id INT NOT NULL,
-    QuestionId INT NOT NULL,
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Category NVARCHAR(50) NOT NULL,
+    Type BIT NOT NULL,
+    Difficulty NVARCHAR(10) NOT NULL,
+    Question NVARCHAR(500) NOT NULL,
+    [Correct Answer] NVARCHAR(200) NOT NULL,
+    [Incorrect Answer 1] NVARCHAR(200) NOT NULL,
+    [Incorrect Answer 2] NVARCHAR(200) NULL DEFAULT '',
+    [Incorrect Answer 3] NVARCHAR(200) NULL DEFAULT ''
+);
+
+CREATE TABLE Answer
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
     GameId INT NOT NULL,
     PlayerId INT NOT NULL,
-    PlayerAnswer NVARCHAR(5) NOT NULL,
+    QuestionId INT NOT NULL,
+    [Player Answer] NVARCHAR(200) NOT NULL,
     FOREIGN KEY (GameId) REFERENCES Game(Id),
     FOREIGN KEY (PlayerId) REFERENCES Player(Id),
-    PRIMARY KEY (Id,QuestionId,GameId)
+    FOREIGN KEY (QuestionId) REFERENCES Question(Id),
 )
 
 -- Player messages to each other
