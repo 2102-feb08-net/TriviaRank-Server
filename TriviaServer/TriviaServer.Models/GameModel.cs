@@ -9,6 +9,7 @@ namespace TriviaServer.Models
   public class GameModel
   {
     const int NAME_LENGTH_LIMIT = 50;
+    const int MAX_NUMBER_OF_QUESTIONS = 50; // API allows up to 50 questions max
     private int _id;
     private string _gameName;
 
@@ -20,7 +21,7 @@ namespace TriviaServer.Models
     private int _totalQuestions;
     private bool _isPublic;
 
-    private Dictionary<string, Question> _questions;
+    private List<Question> _questions;
 
     public GameModel() { }
     public GameModel(
@@ -32,7 +33,7 @@ namespace TriviaServer.Models
       bool gameMode,
       int totalQuestions,
       bool isPublic,
-      Dictionary<string, Question> questions)
+      List<Question> questions)
     {
       this._id = id;
       this._gameName = gameName;
@@ -99,7 +100,10 @@ namespace TriviaServer.Models
       get => _endDate;
       set => _endDate = value;
     }
-
+    /// <summary>
+    /// Game mode true = multiple choice false = true/false
+    /// </summary>
+    /// <value></value>
     public bool GameMode
     {
       get => _gameMode;
@@ -110,20 +114,35 @@ namespace TriviaServer.Models
       get => _totalQuestions;
       set
       {
-        if (value > 0)
+        if (IsNumberOfQuestionsInGameValid(value))
         {
           _totalQuestions = value;
         }
         else
         {
-          throw new InvalidOperationException("Game does not have questions");
+          // game has zero or negative number of questions
+          if (value == 0)
+          {
+            throw new InvalidOperationException("Game does not have questions");
+          }
+          // game tries to have more questions than an api can give
+          else
+          {
+            throw new InvalidOperationException("Game has invalid number of questions");
+          }
         }
       }
     }
+
     public bool IsPublic
     {
       get => _isPublic;
       set => _isPublic = value;
+    }
+
+    public List<Question> Questions
+    {
+      get => _questions;
     }
 
     public bool isGameNameOkay(string gameName)
@@ -133,18 +152,47 @@ namespace TriviaServer.Models
         return false;
       }
       return true;
-
-      // throw new NotImplementedException("Not finished");
     }
 
     public bool isIdFromDataBaseValid(int number)
     {
-      if (number <= 1)
+      if (number < 1)
       {
         return false;
       }
 
       return true;
+    }
+
+    /// <summary>
+    /// Checks to see if a question can be added to a game
+    /// </summary>
+    /// <param name="question"></param>
+    public void AddQuestionToGame(Question question)
+    {
+      if (IsNumberOfQuestionsInGameValid(_totalQuestions))
+      {
+        _questions.Add(question);
+      }
+      else
+      {
+        throw new Exception("Exceeded number of questions in game");
+      }
+    }
+    /// <summary>
+    /// Checks for a valid number of questions in a game
+    /// </summary>
+    /// <param name="numberOfQuestions"></param>
+    /// <returns></returns>
+    public bool IsNumberOfQuestionsInGameValid(int numberOfQuestions)
+    {
+      if (numberOfQuestions > 0 && numberOfQuestions <= MAX_NUMBER_OF_QUESTIONS)
+      {
+        return true;
+      }
+
+      return false;
+      // throw new NotImplementedException("Not implemented");
     }
   }
 }

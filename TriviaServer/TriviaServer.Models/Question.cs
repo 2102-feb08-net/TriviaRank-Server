@@ -20,11 +20,40 @@ namespace TriviaServer.Models
 
     private int _answer;
 
+
     public Question() { }
 
+    public int Id
+    {
+      get => _id;
+      set
+      {
+        if (IdIsOkayFromDatabase(value))
+        {
+          _id = value;
+        }
+        else
+        {
+          throw new InvalidOperationException("Invalid question Id from database");
+        }
+      }
+    }
 
 
 
+
+
+    public bool IdIsOkayFromDatabase(int value)
+    {
+      if (value < 1 || value > Int32.MaxValue)
+      {
+        return false;
+      }
+
+      return true;
+
+      //throw new NotImplementedException("Not done");
+    }
 
 
 

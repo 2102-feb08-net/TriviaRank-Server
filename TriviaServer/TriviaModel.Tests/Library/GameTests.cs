@@ -36,10 +36,45 @@ namespace TriviaServer.Model.Tests
       // arrange
       var game = new GameModel();
       string testString = gameName;
-      // act assert
+      // act
       bool isGameNameOkay = game.isGameNameOkay(gameName);
       // assert
       Assert.False(isGameNameOkay);
+    }
+  }
+
+  public class GameHasValidNumberOfQuestions
+  {
+    [Theory]
+    [InlineData(1)]
+    [InlineData(50)]
+    public void QuestionsList_IsWithInSize_ReturnTrue(int numberOfQuestions)
+    {
+
+      //arrange
+      var game = new GameModel();
+
+
+      //act
+      bool isNumberOfQuestionsOkay = game.IsNumberOfQuestionsInGameValid(numberOfQuestions);
+      //assert
+      Assert.True(isNumberOfQuestionsOkay);
+    }
+  }
+
+  public class GameDoesNotHaveValidNumberOfQuestions
+  {
+    [Theory]
+    [InlineData(0)]
+    [InlineData(51)]
+    public void QuestionsList_IsWithInSize_ReturnFalse(int numberOfQuestions)
+    {
+      //arrange
+      var game = new GameModel();
+      //act
+      bool isNumberOfQuestionsOkay = game.IsNumberOfQuestionsInGameValid(numberOfQuestions);
+      //assert
+      Assert.False(isNumberOfQuestionsOkay);
     }
   }
 }
