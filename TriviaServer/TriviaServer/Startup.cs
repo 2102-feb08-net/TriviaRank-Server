@@ -35,7 +35,7 @@ namespace TriviaServer
         options.AddDefaultPolicy(
                   builder =>
                   {
-                builder.WithOrigins("http://localhost:4200").AllowAnyMethod();
+                builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
               });
       });
 
