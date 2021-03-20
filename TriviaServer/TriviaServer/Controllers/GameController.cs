@@ -44,5 +44,20 @@ namespace TriviaServer.Controllers
             return Ok(game);
         }
 
+        [HttpPost("api/game/{gameId}/player")]
+        public async Task<IActionResult> AddPlayerToGame(int gameId, PlayerModel player)
+        {
+            int gamePlayerId = -1;
+            try
+            {
+                gamePlayerId = await _gameRepo.AddPlayerToGame(gameId, player);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok(gamePlayerId);
+        }
+
     }
 }

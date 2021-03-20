@@ -173,5 +173,27 @@ namespace TriviaServer.DAL.Repositories
                 throw new Exception("Something Happened", e);
             }
         }
+
+        public async Task<int> AddPlayerToGame(int gameId, PlayerModel player)
+        {
+            int gamePlayerId = -1;
+            try
+            {
+                GamePlayer gp = new GamePlayer
+                {
+                    GameId = gameId,
+                    PlayerId = player.Id,
+                    TotalCorrect = 0,
+                };
+                await _context.GamePlayers.AddAsync(gp);
+                await _context.SaveChangesAsync();
+                gamePlayerId = gp.Id;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Something Happened", e);
+            }
+            return gamePlayerId;
+        }
     }
 }
