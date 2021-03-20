@@ -141,6 +141,39 @@ namespace TriviaServer.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<GameModel> getAnyGame(int gameId)
+        {
+            try
+            {
+                DateTimeOffset _now = DateTimeOffset.Now;
+
+                Game game = await _context.Games.Where(x => x.Id == gameId).FirstOrDefaultAsync();
+
+                if (game != null)
+                {
+                    Models.GameModel appGame = new Models.GameModel
+                    {
+                        Id = game.Id,
+                        GameName = game.GameName,
+                        OwnerId = game.OwnerId,
+                        StartDate = game.StartDate,
+                        EndDate = game.EndDate,
+                        TotalQuestions = game.TotalQuestions,
+                        IsPublic = game.IsPublic
+                    };
+                    return appGame;
+                }
+                else
+                {
+                    throw new ArgumentException("No game exists.");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Something Happened", e);
+            }
+        }
+
         public async Task<Models.GameModel> SearchGames(int appGameID)
         {
             try

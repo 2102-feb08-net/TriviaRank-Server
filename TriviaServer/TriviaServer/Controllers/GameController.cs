@@ -28,13 +28,13 @@ namespace TriviaServer.Controllers
         }
 
 
-        [HttpGet("api/game/{id}")]
-        public async Task<IActionResult> GetGameById(int id)
+        [HttpGet("api/game/{gameId}")]
+        public async Task<IActionResult> getAnyGame(int gameId)
         {
             GameModel game;
             try
             {
-                game = await _gameRepo.SearchGames(id);
+                game = await _gameRepo.getAnyGame(gameId);
             }
 
             catch (Exception)
