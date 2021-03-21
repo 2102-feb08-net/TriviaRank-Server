@@ -15,8 +15,6 @@ namespace TriviaServer.Models.Repositories
 
     public class Questions
     {
-        private string _correct_answer;
-
         public string Category { get; set; }
         public string Type { get; set; }
         public string Difficulty { get; set; }

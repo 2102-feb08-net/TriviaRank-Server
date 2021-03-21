@@ -60,9 +60,24 @@ namespace TriviaServer.Controllers
         {
             try
             {
+                //returns IActionResult for pulling questions from external DB   
+                var questions = await _questionController.RetrieveQuestions(newGame.TotalQuestions);
                 
-                return Ok(await _questionController.RetrieveQuestions(newGame.TotalQuestions));
-                //return Ok(await _gameRepo.CreateGame(ownerId, gameName, totalQuestions, isPublic, duration));
+                //creates game in localDB and pulls back GameId
+                var game = await _gameRepo.CreateGame(newGame.OwnerId, newGame.GameName, newGame.TotalQuestions, newGame.IsPublic, newGame.Duration);
+
+                //adds questions to the question table
+                //await _gameRepo.addQuestions(questions)
+
+                ////converts IActionResult to get Value for QuestionsDTO
+                //var result = new OkObjectResult(questions);
+                //QuestionsDTO tempQuestions = (QuestionsDTO) result.Value;
+
+                List<QuestionsModel> appQuestions = QuestionsModel.CreateAndShuffle(questions);
+                return Ok(appQuestions);
+
+                //GameModel appGame = new GameModel();
+                //appGame.CreateAppGame(game, appQuestions);
             }
             catch (Exception)
             {

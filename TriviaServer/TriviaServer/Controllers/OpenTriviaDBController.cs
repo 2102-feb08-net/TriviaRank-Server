@@ -14,7 +14,7 @@ namespace TriviaServer.Controllers
 {
     public class OpenTriviaDBController : ControllerBase
     {
-        public async Task<IActionResult> RetrieveQuestions(int totalQuestions)
+        public async Task<QuestionsDTO> RetrieveQuestions(int totalQuestions)
         {
 
             var uriBuilder = new UriBuilder("https://opentdb.com/api.php");
@@ -34,11 +34,11 @@ namespace TriviaServer.Controllers
             {
                 QuestionsDTO questions = await response.Content.ReadAsAsync<QuestionsDTO>();
 
-                return Ok(questions);
+                return questions;
             }
             else
             {
-                return BadRequest();
+                return null;
             }
         }
     }
