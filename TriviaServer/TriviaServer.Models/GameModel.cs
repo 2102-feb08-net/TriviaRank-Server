@@ -6,193 +6,193 @@ using System.Threading.Tasks;
 
 namespace TriviaServer.Models
 {
-  public class GameModel
-  {
-    const int NAME_LENGTH_LIMIT = 50;
-    const int MAX_NUMBER_OF_QUESTIONS = 50; // API allows up to 50 questions max
-    private int _id;
-    private string _gameName;
-
-    private int _ownerId;
-    private DateTimeOffset _startDate;
-    private DateTimeOffset _endDate;
-    private bool _gameMode;
-
-    private int _totalQuestions;
-    private bool _isPublic;
-
-    private List<Question> _questions;
-
-    public GameModel() { }
-    public GameModel(
-      int id,
-      string gameName,
-      int ownerId,
-      DateTimeOffset startDate,
-      DateTimeOffset endDate,
-      bool gameMode,
-      int totalQuestions,
-      bool isPublic,
-      List<Question> questions)
+    public class GameModel
     {
-      this._id = id;
-      this._gameName = gameName;
-      this._ownerId = ownerId;
-      this._startDate = startDate;
-      this._endDate = endDate;
-      this._gameMode = gameMode;
-      this._totalQuestions = totalQuestions;
-      this._isPublic = isPublic;
-      this._questions = questions;
-    }
-    public int Id
-    {
-      get => _id;
-      set
-      {
-        if (value > 0)
+        const int NAME_LENGTH_LIMIT = 50;
+        const int MAX_NUMBER_OF_QUESTIONS = 50; // API allows up to 50 questions max
+        private int _id;
+        private string _gameName;
+
+        private int _ownerId;
+        private DateTimeOffset _startDate;
+        private DateTimeOffset _endDate;
+        private bool _gameMode;
+
+        private int _totalQuestions;
+        private bool _isPublic;
+
+        private List<Question> _questions;
+
+        public GameModel() { }
+        public GameModel(
+          int id,
+          string gameName,
+          int ownerId,
+          DateTimeOffset startDate,
+          DateTimeOffset endDate,
+          bool gameMode,
+          int totalQuestions,
+          bool isPublic,
+          List<Question> questions)
         {
-          _id = value;
+            this._id = id;
+            this._gameName = gameName;
+            this._ownerId = ownerId;
+            this._startDate = startDate;
+            this._endDate = endDate;
+            this._gameMode = gameMode;
+            this._totalQuestions = totalQuestions;
+            this._isPublic = isPublic;
+            this._questions = questions;
         }
-        else
+        public int Id
         {
-          throw new InvalidOperationException("Invalid game Id");
+            get => _id;
+            set
+            {
+                if (value > 0)
+                {
+                    _id = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid game Id");
+                }
+            }
         }
-      }
-    }
-    public string GameName
-    {
-      get => _gameName;
-      set
-      {
-        if (isGameNameOkay(value))
+        public string GameName
         {
-          _gameName = value;
+            get => _gameName;
+            set
+            {
+                if (isGameNameOkay(value))
+                {
+                    _gameName = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid Game Name");
+                }
+            }
         }
-        else
+        public int OwnerId
         {
-          throw new InvalidOperationException("Invalid Game Name");
+            get => _ownerId;
+            set
+            {
+                if (value > 0)
+                {
+                    _ownerId = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid owner Id");
+                }
+            }
         }
-      }
-    }
-    public int OwnerId
-    {
-      get => _ownerId;
-      set
-      {
-        if (value > 0)
+        public DateTimeOffset StartDate
         {
-          _ownerId = value;
+            get => _startDate;
+            set => _startDate = value;
         }
-        else
+        public DateTimeOffset EndDate
         {
-          throw new InvalidOperationException("Invalid owner Id");
+            get => _endDate;
+            set => _endDate = value;
         }
-      }
-    }
-    public DateTimeOffset StartDate
-    {
-      get => _startDate;
-      set => _startDate = value;
-    }
-    public DateTimeOffset EndDate
-    {
-      get => _endDate;
-      set => _endDate = value;
-    }
-    /// <summary>
-    /// Game mode true = multiple choice false = true/false
-    /// </summary>
-    /// <value></value>
-    public bool GameMode
-    {
-      get => _gameMode;
-      set => _gameMode = value;
-    }
-    public int TotalQuestions
-    {
-      get => _totalQuestions;
-      set
-      {
-        if (IsNumberOfQuestionsInGameValid(value))
+        /// <summary>
+        /// Game mode true = multiple choice false = true/false
+        /// </summary>
+        /// <value></value>
+        public bool GameMode
         {
-          _totalQuestions = value;
+            get => _gameMode;
+            set => _gameMode = value;
         }
-        else
+        public int TotalQuestions
         {
-          // game has zero or negative number of questions
-          if (value == 0)
-          {
-            throw new InvalidOperationException("Game does not have questions");
-          }
-          // game tries to have more questions than an api can give
-          else
-          {
-            throw new InvalidOperationException("Game has invalid number of questions");
-          }
+            get => _totalQuestions;
+            set
+            {
+                if (IsNumberOfQuestionsInGameValid(value))
+                {
+                    _totalQuestions = value;
+                }
+                else
+                {
+                    // game has zero or negative number of questions
+                    if (value == 0)
+                    {
+                        throw new InvalidOperationException("Game does not have questions");
+                    }
+                    // game tries to have more questions than an api can give
+                    else
+                    {
+                        throw new InvalidOperationException("Game has invalid number of questions");
+                    }
+                }
+            }
         }
-      }
-    }
 
-    public bool IsPublic
-    {
-      get => _isPublic;
-      set => _isPublic = value;
-    }
+        public bool IsPublic
+        {
+            get => _isPublic;
+            set => _isPublic = value;
+        }
 
-    public List<Question> Questions
-    {
-      get => _questions;
-    }
+        public List<Question> Questions
+        {
+            get => _questions;
+        }
 
-    public bool isGameNameOkay(string gameName)
-    {
-      if (gameName.Length == 0 || gameName.Length > NAME_LENGTH_LIMIT)
-      {
-        return false;
-      }
-      return true;
-    }
+        public bool isGameNameOkay(string gameName)
+        {
+            if (gameName.Length == 0 || gameName.Length > NAME_LENGTH_LIMIT)
+            {
+                return false;
+            }
+            return true;
+        }
 
-    public bool isIdFromDataBaseValid(int number)
-    {
-      if (number < 1)
-      {
-        return false;
-      }
+        public bool isIdFromDataBaseValid(int number)
+        {
+            if (number < 1)
+            {
+                return false;
+            }
 
-      return true;
-    }
+            return true;
+        }
 
-    /// <summary>
-    /// Checks to see if a question can be added to a game
-    /// </summary>
-    /// <param name="question"></param>
-    public void AddQuestionToGame(Question question)
-    {
-      if (IsNumberOfQuestionsInGameValid(_totalQuestions))
-      {
-        _questions.Add(question);
-      }
-      else
-      {
-        throw new Exception("Exceeded number of questions in game");
-      }
-    }
-    /// <summary>
-    /// Checks for a valid number of questions in a game
-    /// </summary>
-    /// <param name="numberOfQuestions"></param>
-    /// <returns></returns>
-    public bool IsNumberOfQuestionsInGameValid(int numberOfQuestions)
-    {
-      if (numberOfQuestions > 0 && numberOfQuestions <= MAX_NUMBER_OF_QUESTIONS)
-      {
-        return true;
-      }
+        /// <summary>
+        /// Checks to see if a question can be added to a game
+        /// </summary>
+        /// <param name="question"></param>
+        public void AddQuestionToGame(Question question)
+        {
+            if (IsNumberOfQuestionsInGameValid(_totalQuestions))
+            {
+                _questions.Add(question);
+            }
+            else
+            {
+                throw new Exception("Exceeded number of questions in game");
+            }
+        }
+        /// <summary>
+        /// Checks for a valid number of questions in a game
+        /// </summary>
+        /// <param name="numberOfQuestions"></param>
+        /// <returns></returns>
+        public bool IsNumberOfQuestionsInGameValid(int numberOfQuestions)
+        {
+            if (numberOfQuestions > 0 && numberOfQuestions <= MAX_NUMBER_OF_QUESTIONS)
+            {
+                return true;
+            }
 
-      return false;
-      // throw new NotImplementedException("Not implemented");
+            return false;
+            // throw new NotImplementedException("Not implemented");
+        }
     }
-  }
 }

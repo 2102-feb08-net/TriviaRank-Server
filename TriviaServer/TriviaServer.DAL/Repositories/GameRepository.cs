@@ -91,16 +91,16 @@ namespace TriviaServer.DAL.Repositories
             return gameList;
         }
 
-        public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic, double duration)
+        public async Task<Models.GameModel> CreateGame(GameModel game)
         {
             Game newGame = new Game
             {
-                GameName = gameName,
-                OwnerId = ownerId,
+                GameName = game.GameName,
+                OwnerId = game.OwnerId,
                 StartDate = DateTime.Now,
-                EndDate = DateTimeOffset.Now.AddMinutes(duration),
-                TotalQuestions = totalQuestions,
-                IsPublic = isPublic
+                EndDate = game.EndDate,
+                TotalQuestions = game.TotalQuestions,
+                IsPublic = game.IsPublic
             };
 
             await _context.AddAsync(newGame);
@@ -111,7 +111,7 @@ namespace TriviaServer.DAL.Repositories
             var player = new GamePlayer
             {
                 GameId = newGame.Id,
-                PlayerId = ownerId
+                PlayerId = game.OwnerId
             };
 
             await _context.AddAsync(player);

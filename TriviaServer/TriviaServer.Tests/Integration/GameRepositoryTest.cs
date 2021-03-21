@@ -35,10 +35,20 @@ namespace TriviaServer.Tests.Integration
 
             await context.Players.AddAsync(insertOwner);
             context.SaveChanges();
-            
+            var newGame = new GameModel
+            {
+                OwnerId = insertOwner.Id,
+                GameName = "some game",
+                TotalQuestions = 10,
+                IsPublic = true,
+                StartDate = DateTimeOffset.Now,
+                EndDate = DateTimeOffset.Now.AddMinutes(10),
+                GameMode = true
+            };
+
             //act
             var repo = new GameRepository(context);
-            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true, 20.0);
+            var insertedGame = await repo.CreateGame(newGame);
 
 
             //assert
@@ -75,9 +85,19 @@ namespace TriviaServer.Tests.Integration
 
             await context.Players.AddAsync(insertOwner);
             context.SaveChanges();
+            var newGame = new GameModel
+            {
+                OwnerId = insertOwner.Id,
+                GameName = "some game",
+                TotalQuestions = 10,
+                IsPublic = true,
+                StartDate = DateTimeOffset.Now,
+                EndDate = DateTimeOffset.Now.AddMinutes(10),
+                GameMode = true
+            };
 
             var repo = new GameRepository(context);
-            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true, 20.0);
+            var insertedGame = await repo.CreateGame(newGame);
 
             //act
             var game = (await repo.SearchGames(1));
@@ -114,9 +134,19 @@ namespace TriviaServer.Tests.Integration
 
             await context.Players.AddAsync(insertOwner);
             context.SaveChanges();
+            var newGame = new GameModel
+            {
+                OwnerId = insertOwner.Id,
+                GameName = "some game",
+                TotalQuestions = 10,
+                IsPublic = true,
+                StartDate = DateTimeOffset.Now,
+                EndDate = DateTimeOffset.Now.AddMinutes(10),
+                GameMode = true
+            };
 
             var repo = new GameRepository(context);
-            var insertedGame = await repo.CreateGame(insertOwner.Id, "some game", 10, true, 20.0);
+            var insertedGame = await repo.CreateGame(newGame);
 
             //act
             await repo.EndGame(insertedGame);
