@@ -39,7 +39,7 @@ namespace TriviaServer.DAL
                 entity.Property(e => e.PlayerAnswer)
                     .HasMaxLength(200)
                     .HasColumnName("Player Answer")
-                    .HasDefaultValueSql("(N'')");
+                    .HasDefaultValueSql("('')");
 
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Answers)
