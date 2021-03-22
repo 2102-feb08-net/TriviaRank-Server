@@ -91,16 +91,16 @@ namespace TriviaServer.DAL.Repositories
             return gameList;
         }
 
-        public async Task<Models.GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic, double duration)
+        public async Task<Models.GameModel> CreateGame(GameModel game)
         {
             Game newGame = new Game
             {
-                GameName = gameName,
-                OwnerId = ownerId,
+                GameName = game.GameName,
+                OwnerId = game.OwnerId,
                 StartDate = DateTime.Now,
-                EndDate = DateTimeOffset.Now.AddMinutes(duration),
-                TotalQuestions = totalQuestions,
-                IsPublic = isPublic
+                EndDate = game.EndDate,
+                TotalQuestions = game.TotalQuestions,
+                IsPublic = game.IsPublic
             };
 
             await _context.AddAsync(newGame);
@@ -111,7 +111,7 @@ namespace TriviaServer.DAL.Repositories
             var player = new GamePlayer
             {
                 GameId = newGame.Id,
-                PlayerId = ownerId
+                PlayerId = game.OwnerId
             };
 
             await _context.AddAsync(player);
@@ -139,6 +139,39 @@ namespace TriviaServer.DAL.Repositories
 
             _context.Update(endGame);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<GameModel> getAnyGame(int gameId)
+        {
+            try
+            {
+                DateTimeOffset _now = DateTimeOffset.Now;
+
+                Game game = await _context.Games.Where(x => x.Id == gameId).FirstOrDefaultAsync();
+
+                if (game != null)
+                {
+                    Models.GameModel appGame = new Models.GameModel
+                    {
+                        Id = game.Id,
+                        GameName = game.GameName,
+                        OwnerId = game.OwnerId,
+                        StartDate = game.StartDate,
+                        EndDate = game.EndDate,
+                        TotalQuestions = game.TotalQuestions,
+                        IsPublic = game.IsPublic
+                    };
+                    return appGame;
+                }
+                else
+                {
+                    throw new ArgumentException("No game exists.");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Something Happened", e);
+            }
         }
 
         public async Task<Models.GameModel> SearchGames(int appGameID)
@@ -173,6 +206,7 @@ namespace TriviaServer.DAL.Repositories
                 throw new Exception("Something Happened", e);
             }
         }
+
         public async Task<QuestionsDTO> AddQuestions(QuestionsDTO questions)
         {
             foreach (var question in questions.Results)
@@ -230,6 +264,28 @@ namespace TriviaServer.DAL.Repositories
                 await _context.AddAsync(gameLink);
             }
             await _context.SaveChangesAsync();
+
+        public async Task<int> AddPlayerToGame(int gameId, PlayerModel player)
+        {
+            int gamePlayerId = -1;
+            try
+            {
+                GamePlayer gp = new GamePlayer
+                {
+                    GameId = gameId,
+                    PlayerId = player.Id,
+                    TotalCorrect = 0,
+                };
+                await _context.GamePlayers.AddAsync(gp);
+                await _context.SaveChangesAsync();
+                gamePlayerId = gp.Id;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Something Happened", e);
+            }
+            return gamePlayerId;
+
         }
     }
 }

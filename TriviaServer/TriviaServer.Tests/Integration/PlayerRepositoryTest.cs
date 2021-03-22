@@ -21,7 +21,7 @@ namespace TriviaServer.Tests.Integration
 
       var insertedPlayer = new Player
       {
-        Username = "testusername010101",
+        Username = "testusername010101@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 100,
@@ -52,7 +52,7 @@ namespace TriviaServer.Tests.Integration
 
       var insertedPlayer1 = new Player
       {
-        Username = "testusername010101",
+        Username = "testusername010101@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 100,
@@ -61,7 +61,7 @@ namespace TriviaServer.Tests.Integration
       };
       var insertedPlayer2 = new Player
       {
-        Username = "testusername020202",
+        Username = "testusername020202@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 200,
@@ -70,7 +70,7 @@ namespace TriviaServer.Tests.Integration
       };
       var insertedPlayer3 = new Player
       {
-        Username = "testusername030303",
+        Username = "testusername030303@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 300,
@@ -96,7 +96,7 @@ namespace TriviaServer.Tests.Integration
 
       var insertedPlayer1 = new Player
       {
-        Username = "testusername010101",
+        Username = "testusername010101@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 100,
@@ -105,7 +105,7 @@ namespace TriviaServer.Tests.Integration
       };
       var insertedFriend2 = new Player
       {
-        Username = "testusername020202",
+        Username = "testusername020202@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 200,
@@ -114,7 +114,7 @@ namespace TriviaServer.Tests.Integration
       };
       var insertedFriend3 = new Player
       {
-        Username = "testusername030303",
+        Username = "testusername030303@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 300,
@@ -144,7 +144,7 @@ namespace TriviaServer.Tests.Integration
 
       var insertedPlayer1 = new Player
       {
-        Username = "testusername010101",
+        Username = "testusername010101@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 100,
@@ -153,7 +153,7 @@ namespace TriviaServer.Tests.Integration
       };
       var insertedPlayer2 = new Player
       {
-        Username = "testusername020202",
+        Username = "testusername020202@revature.com",
         Password = "password",
         Birthday = DateTime.Now,
         Points = 100,

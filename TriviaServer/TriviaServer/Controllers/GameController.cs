@@ -39,13 +39,13 @@ namespace TriviaServer.Controllers
         }
 
 
-        [HttpGet("api/game/{id}")]
-        public async Task<IActionResult> GetGameById(int id)
+        [HttpGet("api/game/{gameId}")]
+        public async Task<IActionResult> getAnyGame(int gameId)
         {
             GameModel game;
             try
             {
-                game = await _gameRepo.SearchGames(id);
+                game = await _gameRepo.getAnyGame(gameId);
             }
 
             catch (Exception)
@@ -80,23 +80,45 @@ namespace TriviaServer.Controllers
 
                 return Ok(game);
             }
-            catch (Exception)
+             catch (Exception)
             {
                 return StatusCode(500);
             }
         }
-
-        [HttpPut("api/game/end")]
-        public async Task EndGame([FromBody] int Id)
+        
+        
+        [HttpPost("api/game/{gameId}/player")]
+        public async Task<IActionResult> AddPlayerToGame(int gameId, PlayerModel player)
         {
+            int gamePlayerId = -1;
             try
             {
-                await _gameRepo.EndGame(Id);
+                gamePlayerId = await _gameRepo.AddPlayerToGame(gameId, player);
+
             }
             catch (Exception)
             {
-                
+                return StatusCode(500);
             }
+
+            return Ok(gamePlayerId);
         }
+
+        [HttpPost("api/game")]
+        public async Task<IActionResult> newGame(GameModel game)
+        {
+            GameModel newGame;
+            try
+            {
+                newGame = await _gameRepo.CreateGame(game);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok(newGame);
+        }
+
+
     }
 }
