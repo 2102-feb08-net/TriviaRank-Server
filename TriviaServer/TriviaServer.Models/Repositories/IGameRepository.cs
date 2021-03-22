@@ -13,7 +13,7 @@ namespace TriviaServer.Models.Repositories
         public Task<List<GameModel>> GetAllGames();
         public Task<List<GameModel>> SearchAllGames();
         public Task<GameModel> CreateGame(int ownerId, string gameName, int totalQuestions, bool isPublic, double duration);
-        public Task AddPlayerToGame(int gameId, int playerId);
+        public Task<GameModel> AddPlayerToGame(int gameId, int playerId);
         public Task EndGame(int Id);
         public Task UpdatePlayerScore(int gameId, int playerId, int score);
         public Task<QuestionsDTO> AddQuestions(QuestionsDTO questions);

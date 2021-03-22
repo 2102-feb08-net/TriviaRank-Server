@@ -17,16 +17,62 @@ namespace TriviaServer.DAL.Repositories
             _context = context;
         }
 
-        public async Task AddPlayerToGame(int gameId, int playerId)
+        public async Task<GameModel> AddPlayerToGame(int gameId, int playerId)
         {
-            GamePlayer gamePlayer = new GamePlayer
-            {
-                GameId = gameId,
-                PlayerId = playerId,
-                TotalCorrect = 0
-            };
+            DateTimeOffset _now = DateTimeOffset.Now;
 
-            await _context.GamePlayers.AddAsync(gamePlayer);
+            var searchGame = await _context.Games.Where(x => x.Id == gameId && DateTimeOffset.Compare(x.EndDate, _now) > 0 && x.IsPublic == true).FirstAsync();
+
+            if(searchGame != null)
+            {
+                GameModel appGame = new GameModel
+                {
+                    Id = searchGame.Id,
+                    GameName = searchGame.GameName,
+                    OwnerId = searchGame.OwnerId,
+                    StartDate = searchGame.StartDate,
+                    EndDate = searchGame.EndDate,
+                    GameMode = searchGame.GameMode,
+                    IsPublic = searchGame.IsPublic,
+                    TotalQuestions = searchGame.TotalQuestions,
+                    PlayerId = playerId
+                };
+
+                appGame.Questions = new List<QuestionsModel>();
+
+                List<int> questionList = await _context.Answers
+                    .Where(x => x.GameId == searchGame.Id)
+                    .Select(x => x.QuestionId)
+                    .Distinct()
+                    .ToListAsync();
+                    
+
+                foreach (var question in questionList)
+                {
+                    Question dbQuestion = await _context.Questions
+                        .Where(x => x.Id == question).FirstAsync();
+
+                    var appQuestion = new QuestionsModel();
+
+                    appQuestion.Answers.Add(dbQuestion.CorrectAnswer);
+                    appQuestion.Answers.Add(dbQuestion.IncorrectAnswer1);
+                    appQuestion.Answers.Add(dbQuestion.IncorrectAnswer2);
+                    appQuestion.Answers.Add(dbQuestion.IncorrectAnswer3);
+                    appQuestion.Id = dbQuestion.Id;
+                    appQuestion.Question = dbQuestion.Question1;
+
+                    appQuestion.Answers = appQuestion.Answers.Where(x => !string.IsNullOrEmpty(x)).OrderBy(x => Guid.NewGuid()).ToList();
+
+                    appGame.Questions.Add(appQuestion);
+                    
+                }
+                return appGame;
+            }
+            else
+            {
+                throw new ArgumentException("Game not found");
+            }
+
         }
 
         public async Task UpdatePlayerScore(int gameId, int playerId, int score)
@@ -219,15 +265,31 @@ namespace TriviaServer.DAL.Repositories
 
         public async Task LinkGame(GameModel game)
         {
-            foreach(var question in game.Questions)
+            if(game.PlayerId == 0)
             {
-                Answer gameLink = new Answer
+                foreach (var question in game.Questions)
                 {
-                    PlayerId = game.OwnerId,
-                    GameId = game.Id,
-                    QuestionId = question.Id
-                };
-                await _context.AddAsync(gameLink);
+                    Answer gameLink = new Answer
+                    {
+                        PlayerId = game.OwnerId,
+                        GameId = game.Id,
+                        QuestionId = question.Id
+                    };
+                    await _context.AddAsync(gameLink);
+                }
+            }
+            else
+            {
+                foreach (var question in game.Questions)
+                {
+                    Answer gameLink = new Answer
+                    {
+                        PlayerId = game.PlayerId,
+                        GameId = game.Id,
+                        QuestionId = question.Id
+                    };
+                    await _context.AddAsync(gameLink);
+                }
             }
             await _context.SaveChangesAsync();
         }

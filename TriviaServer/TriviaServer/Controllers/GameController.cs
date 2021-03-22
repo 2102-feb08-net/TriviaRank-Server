@@ -86,6 +86,14 @@ namespace TriviaServer.Controllers
             }
         }
 
+        [HttpGet("/api/game/{gameId}/{playerId}")]
+        public async Task<GameModel> AddPlayerToGame(int gameId, int playerId)
+        {
+            var appGame = await _gameRepo.AddPlayerToGame(gameId, playerId);
+            await _gameRepo.LinkGame(appGame);
+            return appGame;
+        }
+
         [HttpPut("api/game/end")]
         public async Task EndGame([FromBody] int Id)
         {

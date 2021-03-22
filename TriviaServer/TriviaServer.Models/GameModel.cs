@@ -18,5 +18,6 @@ namespace TriviaServer.Models
         public bool IsPublic { get; set; }
         public double Duration { get; set; }
         public List<QuestionsModel> Questions { get; set; }
+        public int PlayerId { get; set; }
     }
 }
