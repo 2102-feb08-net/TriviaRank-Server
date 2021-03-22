@@ -35,7 +35,7 @@ namespace TriviaServer
         options.AddDefaultPolicy(
                   builder =>
                   {
-                      builder.WithOrigins("http://localhost:4200", "https://triviarank-web.azurewebsites.net").AllowAnyHeader().AllowAnyMethod();
+                      builder.WithOrigins("http://localhost:4200", "https://triviarank-web.azurewebsites.net").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
                   });
       });
 
