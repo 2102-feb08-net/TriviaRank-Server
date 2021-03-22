@@ -35,8 +35,9 @@ namespace TriviaServer
         options.AddDefaultPolicy(
                   builder =>
                   {
-                builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
-              });
+                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                      builder.WithOrigins("https://triviarank-web.azurewebsites.net").AllowAnyHeader().AllowAnyMethod();
+                  });
       });
 
       string connectionString = Configuration["ConnectionStrings:TriviaDb"];
