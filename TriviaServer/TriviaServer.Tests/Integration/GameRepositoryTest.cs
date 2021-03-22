@@ -239,7 +239,7 @@ namespace TriviaServer.Tests.Integration
 
             var insertOwner = new Player
             {
-                Username = "gameOwner1",
+                Username = "gameOwner1@revature.com",
                 Password = "password",
                 Birthday = DateTime.Now,
                 Points = 100,
@@ -249,7 +249,7 @@ namespace TriviaServer.Tests.Integration
             };
             var insertPlayer = new Player
             {
-                Username = "gamePlayer1",
+                Username = "gamePlayer1@revature.com",
                 Password = "password",
                 Birthday = DateTime.Now,
                 Points = 100,
