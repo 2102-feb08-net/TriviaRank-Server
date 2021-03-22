@@ -15,72 +15,97 @@ using System.Threading.Tasks;
 using TriviaServer.DAL;
 using TriviaServer.DAL.Repositories;
 using TriviaServer.Models.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TriviaServer
 {
-  public class Startup
-  {
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-      Configuration = configuration;
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                            builder.WithOrigins("http://localhost:4200", "https://triviarank-web.azurewebsites.net").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                        });
+            });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://dev-94937278.okta.com/oauth2/default";
+                    options.Audience = "api://default";
+                });
+
+            string connectionString = Configuration["ConnectionStrings:TriviaDb"];
+            services.AddDbContext<TriviaRankContext>(options =>
+            {
+                options.LogTo(Console.WriteLine);
+                options.UseSqlServer(connectionString);
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                options.AddPolicy("AllowedAddresses", policy => policy.RequireAssertion(context =>
+                {
+                    var allowed = (IEnumerable<string>)context.Resource;
+                    string userAddress = context.User.FindFirst(ct => ct.Type.Contains("nameidentifier")).Value;
+
+                    return allowed.Contains(userAddress);
+                }));
+            });
+
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IOutboxRepository, OutboxRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IGameRepository, GameRepository>();
+
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TriviaServer", Version = "v1" });
+            });
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TriviaServer v1"));
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
-
-    public IConfiguration Configuration { get; }
-
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddCors(options =>
-      {
-        options.AddDefaultPolicy(
-                  builder =>
-                  {
-                      builder.WithOrigins("http://localhost:4200", "https://triviarank-web.azurewebsites.net").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-                  });
-      });
-
-      string connectionString = Configuration["ConnectionStrings:TriviaDb"];
-      services.AddDbContext<TriviaRankContext>(options =>
-      {
-        options.LogTo(Console.WriteLine);
-        options.UseSqlServer(connectionString);
-      });
-
-      services.AddScoped<IPlayerRepository, PlayerRepository>();
-      services.AddScoped<IOutboxRepository, OutboxRepository>();
-      services.AddScoped<IMessageRepository, MessageRepository>();
-      services.AddScoped<IGameRepository, GameRepository>();
-
-
-      services.AddControllers();
-      services.AddSwaggerGen(c =>
-      {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "TriviaServer", Version = "v1" });
-      });
-    }
-
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-        app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TriviaServer v1"));
-      }
-
-      app.UseHttpsRedirection();
-
-      app.UseRouting();
-
-      app.UseCors();
-
-      app.UseAuthorization();
-
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllers();
-      });
-    }
-  }
 }
