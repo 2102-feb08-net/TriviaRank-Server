@@ -67,13 +67,17 @@ namespace TriviaServer.Controllers
                 var game = await _gameRepo.CreateGame(newGame.OwnerId, newGame.GameName, newGame.TotalQuestions, newGame.IsPublic, newGame.Duration);
 
                 //adds questions to the question table
-                await _gameRepo.AddQuestions(questions);
+                questions = await _gameRepo.AddQuestions(questions);
 
                 //creates question list for game, stripping correct and incorrect tags on answers.
                 List<QuestionsModel> appQuestions = QuestionsModel.CreateAndShuffle(questions);
                 
                 //assigns the question to the game.
                 game.Questions = appQuestions;
+
+                //inserts gameid, playerid, and questionid to answer table.
+                await _gameRepo.LinkGame(game);
+
                 return Ok(game);
             }
             catch (Exception)

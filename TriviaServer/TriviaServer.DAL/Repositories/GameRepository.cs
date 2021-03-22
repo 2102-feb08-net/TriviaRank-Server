@@ -173,7 +173,7 @@ namespace TriviaServer.DAL.Repositories
                 throw new Exception("Something Happened", e);
             }
         }
-        public async Task AddQuestions(QuestionsDTO questions)
+        public async Task<QuestionsDTO> AddQuestions(QuestionsDTO questions)
         {
             foreach (var question in questions.Results)
             {
@@ -185,13 +185,13 @@ namespace TriviaServer.DAL.Repositories
                     CorrectAnswer = question.CorrectAnswer
                 };
 
-                if (question.Type.Equals("multiple choice"))
+                if (question.Type.Equals("boolean"))
                 {
-                    dbQuestion.Type = true;
+                    dbQuestion.Type = false;
                 }
                 else
                 {
-                    dbQuestion.Type = false;
+                    dbQuestion.Type = true;
                 }
 
                 if (question.IncorrectAnswers.Count > 1)
@@ -204,7 +204,30 @@ namespace TriviaServer.DAL.Repositories
                 {
                     dbQuestion.IncorrectAnswer1 = question.IncorrectAnswers[0];
                 }
-                _context.Add(dbQuestion);
+                await _context.AddAsync(dbQuestion);
+            }
+
+            _context.SaveChanges();
+
+            foreach(var question in questions.Results)
+            {
+                question.Id = _context.Questions.Where(x => x.Question1.Equals(question.Question)).Select(x => x.Id).First();
+            }
+
+            return questions;
+        }
+
+        public async Task LinkGame(GameModel game)
+        {
+            foreach(var question in game.Questions)
+            {
+                Answer gameLink = new Answer
+                {
+                    PlayerId = game.OwnerId,
+                    GameId = game.Id,
+                    QuestionId = question.Id
+                };
+                await _context.AddAsync(gameLink);
             }
             await _context.SaveChangesAsync();
         }

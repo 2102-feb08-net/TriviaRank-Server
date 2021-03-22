@@ -30,6 +30,8 @@ namespace TriviaServer.Controllers
 
             var response = await client.GetAsync(client.BaseAddress);
 
+            client.Dispose();
+
             if(response.IsSuccessStatusCode)
             {
                 QuestionsDTO questions = await response.Content.ReadAsAsync<QuestionsDTO>();

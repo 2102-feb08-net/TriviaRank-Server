@@ -11,6 +11,7 @@ namespace TriviaServer.Models
 {
     public class QuestionsModel
     {
+        public int Id { get; set; }
         public string Question { get; set; }
         public List<string> Answers { get; set; }
 
@@ -28,6 +29,8 @@ namespace TriviaServer.Models
             foreach(var question in questions.Results)
             {
                 QuestionsModel appQuestion = new QuestionsModel();
+
+                appQuestion.Id = question.Id;
 
                 appQuestion.Question = question.Question;
 
