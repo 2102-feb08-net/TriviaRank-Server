@@ -46,16 +46,5 @@ namespace TriviaServer.Models
             }
             return questionList;
         }
-
-        //public QuestionsModel BuildQuestionList(HttpWebRequest questionList)
-        //{
-            
-        //}
-
-        //public QuestionsModel ShuffleAnswers(QuestionsModel appQuestions)
-        //{
-
-        //    return appQuestions;
-        //}
     }
 }

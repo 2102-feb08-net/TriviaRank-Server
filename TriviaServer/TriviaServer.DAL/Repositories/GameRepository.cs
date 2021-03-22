@@ -41,7 +41,7 @@ namespace TriviaServer.DAL.Repositories
         public async Task<List<GameModel>> GetAllGames()
         {
             var dbGames = await _context.Games.ToListAsync();
-            
+
             List<GameModel> gameList = new List<GameModel>();
 
             foreach (var game in dbGames)
@@ -73,7 +73,7 @@ namespace TriviaServer.DAL.Repositories
 
             List<GameModel> gameList = new List<GameModel>();
 
-            foreach(var game in dbGames)
+            foreach (var game in dbGames)
             {
                 var eachGame = new GameModel
                 {
@@ -172,6 +172,41 @@ namespace TriviaServer.DAL.Repositories
             {
                 throw new Exception("Something Happened", e);
             }
+        }
+        public async Task AddQuestions(QuestionsDTO questions)
+        {
+            foreach (var question in questions.Results)
+            {
+                Question dbQuestion = new Question()
+                {
+                    Category = question.Category,
+                    Difficulty = question.Difficulty,
+                    Question1 = question.Question,
+                    CorrectAnswer = question.CorrectAnswer
+                };
+
+                if (question.Type.Equals("multiple choice"))
+                {
+                    dbQuestion.Type = true;
+                }
+                else
+                {
+                    dbQuestion.Type = false;
+                }
+
+                if (question.IncorrectAnswers.Count > 1)
+                {
+                    dbQuestion.IncorrectAnswer1 = question.IncorrectAnswers[0];
+                    dbQuestion.IncorrectAnswer2 = question.IncorrectAnswers[1];
+                    dbQuestion.IncorrectAnswer3 = question.IncorrectAnswers[2];
+                }
+                else
+                {
+                    dbQuestion.IncorrectAnswer1 = question.IncorrectAnswers[0];
+                }
+                _context.Add(dbQuestion);
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

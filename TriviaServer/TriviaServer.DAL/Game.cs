@@ -9,9 +9,9 @@ namespace TriviaServer.DAL
     {
         public Game()
         {
+            Answers = new HashSet<Answer>();
             GameInviteOutboxes = new HashSet<GameInviteOutbox>();
             GamePlayers = new HashSet<GamePlayer>();
-            Questions = new HashSet<Question>();
         }
 
         public int Id { get; set; }
@@ -24,8 +24,8 @@ namespace TriviaServer.DAL
         public bool IsPublic { get; set; }
 
         public virtual Player Owner { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<GameInviteOutbox> GameInviteOutboxes { get; set; }
         public virtual ICollection<GamePlayer> GamePlayers { get; set; }
-        public virtual ICollection<Question> Questions { get; set; }
     }
 }

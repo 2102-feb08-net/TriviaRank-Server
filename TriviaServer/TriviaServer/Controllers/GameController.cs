@@ -56,7 +56,7 @@ namespace TriviaServer.Controllers
         }
 
         [HttpPost("api/game/new/{newGame}")]
-        public async Task<IActionResult> CreateGame(GameDTO newGame)
+        public async Task<IActionResult> CreateGame(GameModel newGame)
         {
             try
             {
@@ -67,17 +67,14 @@ namespace TriviaServer.Controllers
                 var game = await _gameRepo.CreateGame(newGame.OwnerId, newGame.GameName, newGame.TotalQuestions, newGame.IsPublic, newGame.Duration);
 
                 //adds questions to the question table
-                //await _gameRepo.addQuestions(questions)
+                await _gameRepo.AddQuestions(questions);
 
-                ////converts IActionResult to get Value for QuestionsDTO
-                //var result = new OkObjectResult(questions);
-                //QuestionsDTO tempQuestions = (QuestionsDTO) result.Value;
-
+                //creates question list for game, stripping correct and incorrect tags on answers.
                 List<QuestionsModel> appQuestions = QuestionsModel.CreateAndShuffle(questions);
-                return Ok(appQuestions);
-
-                //GameModel appGame = new GameModel();
-                //appGame.CreateAppGame(game, appQuestions);
+                
+                //assigns the question to the game.
+                game.Questions = appQuestions;
+                return Ok(game);
             }
             catch (Exception)
             {

@@ -9,6 +9,7 @@ namespace TriviaServer.DAL
     {
         public Player()
         {
+            Answers = new HashSet<Answer>();
             FriendFriendNavigations = new HashSet<Friend>();
             FriendInviteOutboxInviteds = new HashSet<FriendInviteOutbox>();
             FriendInviteOutboxInviters = new HashSet<FriendInviteOutbox>();
@@ -19,7 +20,6 @@ namespace TriviaServer.DAL
             MessageFroms = new HashSet<Message>();
             MessageTos = new HashSet<Message>();
             PlayerStatistics = new HashSet<PlayerStatistic>();
-            Questions = new HashSet<Question>();
         }
 
         public int Id { get; set; }
@@ -30,6 +30,7 @@ namespace TriviaServer.DAL
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<Friend> FriendFriendNavigations { get; set; }
         public virtual ICollection<FriendInviteOutbox> FriendInviteOutboxInviteds { get; set; }
         public virtual ICollection<FriendInviteOutbox> FriendInviteOutboxInviters { get; set; }
@@ -40,6 +41,5 @@ namespace TriviaServer.DAL
         public virtual ICollection<Message> MessageFroms { get; set; }
         public virtual ICollection<Message> MessageTos { get; set; }
         public virtual ICollection<PlayerStatistic> PlayerStatistics { get; set; }
-        public virtual ICollection<Question> Questions { get; set; }
     }
 }
