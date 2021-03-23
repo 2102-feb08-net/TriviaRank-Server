@@ -13,7 +13,7 @@ namespace TriviaServer.Tests
     public void QuestionId_IsWithInBounds_ReturnTrue(int id)
     {
       // arrange
-      var question = new Question();
+      var question = new QuestionsModel();
       int testId = id;
 
       // act
@@ -31,7 +31,7 @@ namespace TriviaServer.Tests
     public void QuestionId_IsNotWithInBounds_ReturnTrue(int id)
     {
       // arrange
-      var question = new Question();
+      var question = new QuestionsModel();
       int testId = id;
 
       // act
