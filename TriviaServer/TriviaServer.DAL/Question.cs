@@ -7,13 +7,21 @@ namespace TriviaServer.DAL
 {
     public partial class Question
     {
-        public int Id { get; set; }
-        public int QuestionId { get; set; }
-        public int GameId { get; set; }
-        public int PlayerId { get; set; }
-        public string PlayerAnswer { get; set; }
+        public Question()
+        {
+            Answers = new HashSet<Answer>();
+        }
 
-        public virtual Game Game { get; set; }
-        public virtual Player Player { get; set; }
+        public int Id { get; set; }
+        public string Category { get; set; }
+        public bool Type { get; set; }
+        public string Difficulty { get; set; }
+        public string Question1 { get; set; }
+        public string CorrectAnswer { get; set; }
+        public string IncorrectAnswer1 { get; set; }
+        public string IncorrectAnswer2 { get; set; }
+        public string IncorrectAnswer3 { get; set; }
+
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 }

@@ -149,7 +149,7 @@ namespace TriviaServer.Tests.Integration
             var insertedGame = await repo.CreateGame(newGame);
 
             //act
-            await repo.EndGame(insertedGame);
+            await repo.EndGame(insertedGame.Id);
 
             //assert
             var dbGame = await context.Games.Where(x => x.Id == insertedGame.Id).FirstAsync();

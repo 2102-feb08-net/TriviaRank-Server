@@ -17,6 +17,7 @@ namespace TriviaServer.DAL
         {
         }
 
+        public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Friend> Friends { get; set; }
         public virtual DbSet<FriendInviteOutbox> FriendInviteOutboxes { get; set; }
         public virtual DbSet<Game> Games { get; set; }
@@ -30,6 +31,34 @@ namespace TriviaServer.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.ToTable("Answer");
+
+                entity.Property(e => e.PlayerAnswer)
+                    .HasMaxLength(200)
+                    .HasColumnName("Player Answer")
+                    .HasDefaultValueSql("('')");
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.Answers)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Answer__GameId__625A9A57");
+
+                entity.HasOne(d => d.Player)
+                    .WithMany(p => p.Answers)
+                    .HasForeignKey(d => d.PlayerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Answer__PlayerId__634EBE90");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.Answers)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Answer__Question__6442E2C9");
+            });
 
             modelBuilder.Entity<Friend>(entity =>
             {
@@ -169,26 +198,40 @@ namespace TriviaServer.DAL
 
             modelBuilder.Entity<Question>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.QuestionId, e.GameId })
-                    .HasName("PK__Question__1EE2526A0F23A441");
-
                 entity.ToTable("Question");
 
-                entity.Property(e => e.PlayerAnswer)
+                entity.Property(e => e.Category)
                     .IsRequired()
-                    .HasMaxLength(5);
+                    .HasMaxLength(50);
 
-                entity.HasOne(d => d.Game)
-                    .WithMany(p => p.Questions)
-                    .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Question__GameId__5AB9788F");
+                entity.Property(e => e.CorrectAnswer)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnName("Correct Answer");
 
-                entity.HasOne(d => d.Player)
-                    .WithMany(p => p.Questions)
-                    .HasForeignKey(d => d.PlayerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Question__Player__5BAD9CC8");
+                entity.Property(e => e.Difficulty)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.IncorrectAnswer1)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnName("Incorrect Answer 1");
+
+                entity.Property(e => e.IncorrectAnswer2)
+                    .HasMaxLength(200)
+                    .HasColumnName("Incorrect Answer 2")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.IncorrectAnswer3)
+                    .HasMaxLength(200)
+                    .HasColumnName("Incorrect Answer 3")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Question1)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnName("Question");
             });
 
             OnModelCreatingPartial(modelBuilder);
