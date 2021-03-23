@@ -60,7 +60,7 @@ namespace TriviaServer.Models
 
       return true;
     }
-        public int CalculateScore(GameModel appGame, List<QuestionsModel> dbQuestions)
+        public static int CalculateScore(GameModel appGame, List<QuestionsModel> dbQuestions)
         {
             int playerScore = 0;
 

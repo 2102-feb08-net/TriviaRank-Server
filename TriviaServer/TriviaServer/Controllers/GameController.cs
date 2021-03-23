@@ -128,11 +128,11 @@ namespace TriviaServer.Controllers
     }
 
     [HttpPut("api/game/end")]
-    public async Task EndGame([FromBody] int Id)
+    public async Task EndGame([FromBody] GameModel appGame)
     {
       try
       {
-        await _gameRepo.EndGame(Id);
+        await _gameRepo.EndGame(appGame);
       }
       catch (Exception)
       {

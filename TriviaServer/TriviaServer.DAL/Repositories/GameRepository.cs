@@ -217,7 +217,7 @@ namespace TriviaServer.DAL.Repositories
                 dbQuestions.Add(dbQuestion);
                 
             }
-            return CalculateScore(appGame, dbQuestions);
+            return QuestionsModel.CalculateScore(appGame, dbQuestions);
         }
 
         public async Task<GameModel> getAnyGame(int gameId)
