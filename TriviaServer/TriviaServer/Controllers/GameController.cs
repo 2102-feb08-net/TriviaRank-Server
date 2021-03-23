@@ -100,48 +100,44 @@ namespace TriviaServer.Controllers
       {
         return StatusCode(500);
       }
-<<<<<<< HEAD
-      return Ok(gamePlayerId);
+      //   return Ok(gamePlayerId);
     }
 
-    [HttpPost("api/game")]
-    public async Task<IActionResult> newGame(GameModel game)
+    // [HttpPost("api/game")]
+    // public async Task<IActionResult> newGame(GameModel game)
+    // {
+    //   GameModel newGame;
+    //   try
+    //   {
+    //     newGame = await _gameRepo.CreateGame(game);
+    //   }
+    //   catch (Exception)
+    //   {
+    //     return StatusCode(500);
+    //   }
+    //   return Ok(newGame);
+    // }
+
+
+    [HttpGet("/api/game/{gameId}/{playerId}")]
+    public async Task<GameModel> AddPlayerToGame(int gameId, int playerId)
     {
-      GameModel newGame;
+      var appGame = await _gameRepo.AddPlayerToGame(gameId, playerId);
+      await _gameRepo.LinkGame(appGame);
+      return appGame;
+    }
+
+    [HttpPut("api/game/end")]
+    public async Task EndGame([FromBody] int Id)
+    {
       try
       {
-        newGame = await _gameRepo.CreateGame(game);
+        await _gameRepo.EndGame(Id);
       }
       catch (Exception)
       {
-        return StatusCode(500);
+
       }
-      return Ok(newGame);
     }
-
-=======
-        }
-
-        [HttpGet("/api/game/{gameId}/{playerId}")]
-        public async Task<GameModel> AddPlayerToGame(int gameId, int playerId)
-        {
-            var appGame = await _gameRepo.AddPlayerToGame(gameId, playerId);
-            await _gameRepo.LinkGame(appGame);
-            return appGame;
-        }
-
-        [HttpPut("api/game/end")]
-        public async Task EndGame([FromBody] int Id)
-        {
-            try
-            {
-                await _gameRepo.EndGame(Id);
-            }
-            catch (Exception)
-            {
-                
-            }
-        }
->>>>>>> 0b457cfe29ddfd4b4c351ab26e422c5034a140ee
   }
 }
