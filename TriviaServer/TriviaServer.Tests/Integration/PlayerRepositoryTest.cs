@@ -240,16 +240,28 @@ namespace TriviaServer.Tests.Integration
                 FirstName = "Bob",
                 LastName = "Smith"
             };
+            var insertedPlayer5 = new Player
+            {
+                Username = "testusername050505@revature.com",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Bob",
+                LastName = "Smith"
+            };
             await context.Players.AddAsync(insertedPlayer1);
             await context.Players.AddAsync(insertedPlayer2);
             await context.Players.AddAsync(insertedPlayer3);
             await context.Players.AddAsync(insertedPlayer4);
+            await context.Players.AddAsync(insertedPlayer5);
             context.SaveChanges();
 
             var repo = new PlayerRepository(context);
 
             Assert.Equal(2, (await repo.getNPlayers(2, 0)).Count());
             Assert.Equal(2, (await repo.getNPlayers(2, 1)).Count());
+            Assert.Single((await repo.getNPlayers(1, 2)));
+            Assert.Single((await repo.getNPlayers(2, 2)));
         }
     }
 }

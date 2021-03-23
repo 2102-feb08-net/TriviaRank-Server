@@ -155,7 +155,7 @@ namespace TriviaServer.DAL.Repositories
         {
             List<PlayerModel> players = (await getAllPlayers()).ToList();
             players.Sort((p1, p2) => p2.Points - p1.Points);
-            return players.GetRange(index * numPlayers, Math.Min(numPlayers, Math.Abs((numPlayers*index+1) - players.Count()) ));
+            return players.GetRange(index * numPlayers, Math.Min(numPlayers, Math.Abs((numPlayers*(index)) - players.Count()) ));
         }
     }
 }
