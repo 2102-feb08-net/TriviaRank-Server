@@ -42,15 +42,19 @@ namespace TriviaServer.DAL.Repositories
         public async Task<PlayerModel> getPlayerByUsername(string username)
         {
             Player p = await _context.Players.FirstOrDefaultAsync(p => p.Username == username);
-            return new PlayerModel()
+            if (p != null)
             {
-                Id = p.Id,
-                Username = p.Username,
-                FirstName = p.FirstName,
-                LastName = p.LastName,
-                Points = p.Points,
-                Birthday = p.Birthday
-            };
+                return new PlayerModel()
+                {
+                    Id = p.Id,
+                    Username = p.Username,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Points = p.Points,
+                    Birthday = p.Birthday
+                };
+            }
+            return null;
         }
 
         /// <summary>
@@ -100,8 +104,14 @@ namespace TriviaServer.DAL.Repositories
             return friendsOfPlayer.Union(currentPlayer.FriendPlayers.Select(p => p.FriendId));
         }
 
-        public async Task<int> createPlayer(PlayerModel player)
+        public async Task<PlayerModel> createPlayer(PlayerModel player)
         {
+            PlayerModel searchPlayer = (await getPlayerByUsername(player.Username));
+            if (searchPlayer != null)
+            {
+                return searchPlayer;
+            }
+
             Player newPlayer = new Player()
             {
                 FirstName = player.FirstName,
@@ -113,7 +123,8 @@ namespace TriviaServer.DAL.Repositories
 
             await _context.AddAsync(newPlayer);
             await saveAsync();
-            return newPlayer.Id;
+            player.Id = newPlayer.Id;
+            return player;
         }
 
         public async Task createFriend(int playerId, int friendId)

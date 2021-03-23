@@ -127,10 +127,10 @@ namespace TriviaServer.Controllers
         [HttpPost("api/player")]
         public async Task<IActionResult> createPlayer(PlayerModel newPlayer)
         {
-            int playerId;
+            PlayerModel updatedPlayer;
             try
             {
-                playerId = await _playerRepo.createPlayer(newPlayer);
+                updatedPlayer = await _playerRepo.createPlayer(newPlayer);
             }
             catch (InvalidOperationException)
             {
@@ -140,7 +140,7 @@ namespace TriviaServer.Controllers
             {
                 return StatusCode(500);
             }
-            return Ok(playerId);
+            return Ok(updatedPlayer);
         }
 
         [HttpPost("api/player/{playerId}/friend/{friendId}")]
