@@ -198,5 +198,58 @@ namespace TriviaServer.Tests.Integration
             Assert.Equal(insertedGame1.IsPublic, createdGame.IsPublic);
         }
 
+        [Fact]
+        public async Task CheckValidNumIndexedPlayers()
+        {
+            using var contextFactory = new TestTriviaGameContextFactory();
+            using TriviaRankContext context = contextFactory.CreateContext();
+
+            var insertedPlayer1 = new Player
+            {
+                Username = "testusername010101@revature.com",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Bob",
+                LastName = "Smith"
+            };
+            var insertedPlayer2 = new Player
+            {
+                Username = "testusername020202@revature.com",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Bob",
+                LastName = "Smith"
+            };
+            var insertedPlayer3 = new Player
+            {
+                Username = "testusername030303@revature.com",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Bob",
+                LastName = "Smith"
+            };
+            var insertedPlayer4 = new Player
+            {
+                Username = "testusername040404@revature.com",
+                Password = "password",
+                Birthday = DateTime.Now,
+                Points = 100,
+                FirstName = "Bob",
+                LastName = "Smith"
+            };
+            await context.Players.AddAsync(insertedPlayer1);
+            await context.Players.AddAsync(insertedPlayer2);
+            await context.Players.AddAsync(insertedPlayer3);
+            await context.Players.AddAsync(insertedPlayer4);
+            context.SaveChanges();
+
+            var repo = new PlayerRepository(context);
+
+            Assert.Equal(2, (await repo.getNPlayers(2, 0)).Count());
+            Assert.Equal(2, (await repo.getNPlayers(2, 1)).Count());
+        }
     }
 }
