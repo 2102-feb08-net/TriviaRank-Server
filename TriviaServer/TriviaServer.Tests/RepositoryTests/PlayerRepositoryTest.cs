@@ -8,8 +8,8 @@ using Xunit;
 
 namespace TriviaServer.Integration.Tests
 {
-  public class PlayerRepositoryTests
-  {
+    public class PlayerRepositoryTests
+    {
 
-  }
+    }
 }
