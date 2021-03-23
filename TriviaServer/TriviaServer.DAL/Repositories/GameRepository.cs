@@ -171,8 +171,10 @@ namespace TriviaServer.DAL.Repositories
         StartDate = newGame.StartDate,
         EndDate = newGame.EndDate,
         TotalQuestions = newGame.TotalQuestions,
-        IsPublic = newGame.IsPublic
+        IsPublic = newGame.IsPublic,
+        PlayerId = game.PlayerId
       };
+
       return appGame;
     }
 
