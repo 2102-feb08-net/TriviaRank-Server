@@ -32,7 +32,7 @@ namespace TriviaServer.Controllers
 
             client.Dispose();
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 QuestionsDTO questions = await response.Content.ReadAsAsync<QuestionsDTO>();
 

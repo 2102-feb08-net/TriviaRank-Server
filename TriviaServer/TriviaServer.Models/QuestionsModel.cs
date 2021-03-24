@@ -14,7 +14,8 @@ namespace TriviaServer.Models
         public int Id { get; set; }
         public string Question { get; set; }
         public List<string> Answers { get; set; }
-        public string PlayerAnswer { get; set; }
+        public string PlayerAnswer { get; set; 
+
 
         public QuestionsModel()
         {
@@ -51,6 +52,7 @@ namespace TriviaServer.Models
             return questionList;
         }
 
+
         public bool IdIsOkayFromDatabase(int id)
         {
             if (id < 1)
@@ -78,6 +80,6 @@ namespace TriviaServer.Models
                 }
             }
             return playerScore;
-        }
+
     }
 }

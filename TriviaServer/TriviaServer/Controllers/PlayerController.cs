@@ -49,6 +49,19 @@ namespace TriviaServer.Controllers
             return Ok(players);
         }
 
+        [HttpGet("api/players/amount")]
+        public async Task<IActionResult> getNumPlayers()
+        {
+            try
+            {
+                return Ok((await _playerRepo.getAllPlayers()).Count());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
         [HttpGet("api/player/id/{id}")]
         public async Task<IActionResult> getPlayerById(int id)
         {
@@ -96,13 +109,28 @@ namespace TriviaServer.Controllers
             return Ok(sortedPlayers);
         }
 
+        [HttpGet("api/players/amount/{amount}/index/{index}")]
+        public async Task<IActionResult> getPlayersInIndex(int amount, int index)
+        {
+            IEnumerable<PlayerModel> players;
+            try
+            {
+                players = await _playerRepo.getNPlayers(amount, index);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok(players);
+        }
+
         [HttpPost("api/player")]
         public async Task<IActionResult> createPlayer(PlayerModel newPlayer)
         {
-            int playerId;
+            PlayerModel updatedPlayer;
             try
             {
-                playerId = await _playerRepo.createPlayer(newPlayer);
+                updatedPlayer = await _playerRepo.createPlayer(newPlayer);
             }
             catch (InvalidOperationException)
             {
@@ -112,7 +140,7 @@ namespace TriviaServer.Controllers
             {
                 return StatusCode(500);
             }
-            return Ok(playerId);
+            return Ok(updatedPlayer);
         }
 
         [HttpPost("api/player/{playerId}/friend/{friendId}")]

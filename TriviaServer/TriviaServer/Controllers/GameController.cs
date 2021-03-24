@@ -103,22 +103,6 @@ namespace TriviaServer.Controllers
       //   return Ok(gamePlayerId);
     }
 
-    // [HttpPost("api/game")]
-    // public async Task<IActionResult> newGame(GameModel game)
-    // {
-    //   GameModel newGame;
-    //   try
-    //   {
-    //     newGame = await _gameRepo.CreateGame(game);
-    //   }
-    //   catch (Exception)
-    //   {
-    //     return StatusCode(500);
-    //   }
-    //   return Ok(newGame);
-    // }
-
-
     [HttpGet("/api/game/{gameId}/{playerId}")]
     public async Task<GameModel> AddPlayerToGame(int gameId, int playerId)
     {
@@ -138,6 +122,6 @@ namespace TriviaServer.Controllers
       {
 
       }
+
     }
-  }
 }
