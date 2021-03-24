@@ -9,64 +9,64 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TriviaServer.Models
 {
-  public class QuestionsModel
-  {
-    public int Id { get; set; }
-    public string Question { get; set; }
-    public List<string> Answers { get; set; }
+    public class QuestionsModel
+    {
+        public int Id { get; set; }
+        public string Question { get; set; }
+        public List<string> Answers { get; set; }
         public string PlayerAnswer { get; set; }
 
         public QuestionsModel()
-    {
-      Answers = new List<string>();
-    }
-
-
-    public static List<QuestionsModel> CreateAndShuffle(QuestionsDTO questions)
-    {
-
-      List<QuestionsModel> questionList = new List<QuestionsModel>();
-
-      foreach (var question in questions.Results)
-      {
-        QuestionsModel appQuestion = new QuestionsModel();
-
-        appQuestion.Id = question.Id;
-
-        appQuestion.Question = question.Question;
-
-        appQuestion.Answers.Add(question.CorrectAnswer);
-
-        foreach (var answer in question.IncorrectAnswers)
         {
-          string appAnswer = answer;
-
-          appQuestion.Answers.Add(appAnswer);
+            Answers = new List<string>();
         }
 
-        appQuestion.Answers = appQuestion.Answers.OrderBy(x => Guid.NewGuid()).ToList();
 
-        questionList.Add(appQuestion);
-      }
-      return questionList;
-    }
+        public static List<QuestionsModel> CreateAndShuffle(QuestionsDTO questions)
+        {
 
-    public bool IdIsOkayFromDatabase(int id)
-    {
-      if (id < 1)
-      {
-        return false;
-      }
+            List<QuestionsModel> questionList = new List<QuestionsModel>();
 
-      return true;
-    }
+            foreach (var question in questions.Results)
+            {
+                QuestionsModel appQuestion = new QuestionsModel();
+
+                appQuestion.Id = question.Id;
+
+                appQuestion.Question = question.Question;
+
+                appQuestion.Answers.Add(question.CorrectAnswer);
+
+                foreach (var answer in question.IncorrectAnswers)
+                {
+                    string appAnswer = answer;
+
+                    appQuestion.Answers.Add(appAnswer);
+                }
+
+                appQuestion.Answers = appQuestion.Answers.OrderBy(x => Guid.NewGuid()).ToList();
+
+                questionList.Add(appQuestion);
+            }
+            return questionList;
+        }
+
+        public bool IdIsOkayFromDatabase(int id)
+        {
+            if (id < 1)
+            {
+                return false;
+            }
+
+            return true;
+        }
         public static int CalculateScore(GameModel appGame, List<QuestionsModel> dbQuestions)
         {
             int playerScore = 0;
 
-            foreach(var question in appGame.Questions)
+            foreach (var question in appGame.Questions)
             {
-                foreach(var answer in dbQuestions)
+                foreach (var answer in dbQuestions)
                 {
                     if (question.Id == answer.Id)
                     {
@@ -79,5 +79,5 @@ namespace TriviaServer.Models
             }
             return playerScore;
         }
-  }
+    }
 }
