@@ -71,7 +71,7 @@ namespace TriviaServer.Controllers
 
         }
 
-        [HttpPost("api/game/new/{newGame}")]
+        [HttpPost("api/game")]
         public async Task<IActionResult> CreateGame(GameModel newGame)
         {
             try
