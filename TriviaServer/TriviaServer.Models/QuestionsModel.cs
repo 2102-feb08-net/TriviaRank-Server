@@ -14,6 +14,8 @@ namespace TriviaServer.Models
         public int Id { get; set; }
         public string Question { get; set; }
         public List<string> Answers { get; set; }
+        public string PlayerAnswer { get; set; } 
+
 
         public QuestionsModel()
         {
@@ -50,6 +52,7 @@ namespace TriviaServer.Models
             return questionList;
         }
 
+
         public bool IdIsOkayFromDatabase(int id)
         {
             if (id < 1)
@@ -58,6 +61,25 @@ namespace TriviaServer.Models
             }
 
             return true;
+        }
+        public static int CalculateScore(GameModel appGame, List<QuestionsModel> dbQuestions)
+        {
+            int playerScore = 0;
+
+            foreach (var question in appGame.Questions)
+            {
+                foreach (var answer in dbQuestions)
+                {
+                    if (question.Id == answer.Id)
+                    {
+                        if (question.PlayerAnswer.Equals(answer.Answers[0]))
+                        {
+                            playerScore++;
+                        }
+                    }
+                }
+            }
+            return playerScore;
         }
     }
 }

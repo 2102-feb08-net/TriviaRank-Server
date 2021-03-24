@@ -171,20 +171,55 @@ namespace TriviaServer.DAL.Repositories
                 StartDate = newGame.StartDate,
                 EndDate = newGame.EndDate,
                 TotalQuestions = newGame.TotalQuestions,
-                IsPublic = newGame.IsPublic
+                IsPublic = newGame.IsPublic,
+                PlayerId = game.PlayerId
             };
+
             return appGame;
         }
 
-        public async Task EndGame(int Id)
+        public async Task<int> EndGame(GameModel appGame)
         {
-            Game endGame = _context.Games
-                .Where(x => x.Id == Id).First();
+            List<Answer> answers = await _context.Answers
+                .Where(x => x.GameId == appGame.Id)
+                .Where(x => x.PlayerId == appGame.PlayerId)
+                .ToListAsync();
 
-            endGame.EndDate = DateTime.Now;
+            foreach (var question in appGame.Questions)
+            {
+                foreach (var answer in answers)
+                {
+                    if (answer.QuestionId == question.Id)
+                    {
+                        answer.PlayerAnswer = question.PlayerAnswer;
+                        _context.Update(answer.PlayerAnswer);
+                    }
+                }
+            }
 
-            _context.Update(endGame);
+            _context.Update(answers);
             await _context.SaveChangesAsync();
+            return await ScoreCalculation(appGame);
+        }
+
+        public async Task<int> ScoreCalculation(GameModel appGame)
+        {
+            List<QuestionsModel> dbQuestions = new List<QuestionsModel>();
+
+            foreach (var question in appGame.Questions)
+            {
+                Question query = await _context.Questions
+                    .Where(x => x.Id == question.Id).FirstAsync();
+
+                QuestionsModel dbQuestion = new QuestionsModel();
+
+                dbQuestion.Id = query.Id;
+                dbQuestion.Answers[0] = query.CorrectAnswer;
+
+                dbQuestions.Add(dbQuestion);
+
+            }
+            return QuestionsModel.CalculateScore(appGame, dbQuestions);
         }
 
         public async Task<GameModel> getAnyGame(int gameId)
