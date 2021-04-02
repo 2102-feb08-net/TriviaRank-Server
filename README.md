@@ -15,10 +15,18 @@ A trivia game using the [Open Trivia Database Api](https://opentdb.com/). Partic
 * HTML / CSS / Javascript
 * Devops / Azure Pipelines
 
-## Stretch Goals:
-* Adding friends
-* Adding game integration
-* Improving messaging capabilities
+## Features:
+* Login via Okta
+* View leaderboard
+* Send Friend requests
+* Accept Friend requests
+* Message/Chat with Friends 
+
+## Screenshots:
+![image](https://user-images.githubusercontent.com/48230725/113452139-06febf00-93c9-11eb-9ca1-98f70df3b6e3.png)
+![image](https://user-images.githubusercontent.com/48230725/113452198-272e7e00-93c9-11eb-9cc7-2068ad64fcda.png)
+![image](https://user-images.githubusercontent.com/48230725/113452360-6e1c7380-93c9-11eb-9da1-95188e766c35.png)
+![image](https://user-images.githubusercontent.com/48230725/113452470-a7ed7a00-93c9-11eb-81ff-45386d8db71e.png)
 
 ## Contributing:
 For now contributing will only be done with project members, but thank you for your interest
