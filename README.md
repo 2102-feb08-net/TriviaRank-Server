@@ -4,7 +4,7 @@
 
 ## Description:
 
-A trivia game using the [Open Trivia Database Api](https://opentdb.com/). Participants will compete by gaining points from answering trivia questions correctly. The participant with the most points at the end of the game will be the winner. Participants will be able to create accounts that store statistics from games played.
+A trivia game using the [Open Trivia Database Api](https://opentdb.com/). Participants will compete by gaining points by answering trivia questions correctly. The participant with the most points at the end of the game will be the winner. Participants will be able to create accounts that store statistics from games played.
 
 ## Technology:
 * C# backend
